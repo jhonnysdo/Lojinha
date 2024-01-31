@@ -1,50 +1,49 @@
 package br.com.fiap.challengeecommercelogin.entity;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
-public class CustomUserDetails implements UserDetails {
-    private User user; // Sua classe de entidade User
+// https://medium.com/spring-boot/spring-boot-3-spring-security-6-jwt-authentication-authorization-98702d6313a5
+public class CustomUserDetails extends User implements UserDetails {
+    private String username;
+    private String password;
+    private Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetails(User user) {
-        this.user = user;
+    public CustomUserDetails(User byUsername) {
+        this.username = byUsername.getUsername();
+        this.password= byUsername.getPassword();
+        List<GrantedAuthority> auths = new ArrayList<>();
+
+//        for(UserRole role : byUsername.getRoles()){
+//            auths.add(new SimpleGrantedAuthority(role.getName().toUpperCase()));
+//        }
+        if (byUsername.getRole() != null) {
+            auths.add(new SimpleGrantedAuthority(byUsername.getRole().name().toUpperCase()));
+        } else {
+            // Lida com o caso em que 'role' é nulo (por exemplo, atribua uma autoridade padrão)
+            // authority = new SimpleGrantedAuthority("ROLE_DEFAULT");
+            auths.add(new SimpleGrantedAuthority("USER"));
+        }
+        this.authorities = auths;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList(); // Você pode configurar as autoridades conforme necessário
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true; // Pode personalizar conforme necessário
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true; // Pode personalizar conforme necessário
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true; // Pode personalizar conforme necessário
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true; // Pode personalizar conforme necessário
+        return this.username;
     }
 }
