@@ -28,6 +28,146 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get all itens",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvdGF2aW8iLCJpYXQiOjE3MDY3OTk4NzcsImV4cCI6MTcwNjgwMTMxN30.8OT_wVtF2UtWcL9mi3g3uh-rS_etFjCSegyNVxxP8MA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/gestao-itens/itens",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"gestao-itens",
+								"itens"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get item by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvdGF2aW8iLCJpYXQiOjE3MDY3OTk4NzcsImV4cCI6MTcwNjgwMTMxN30.8OT_wVtF2UtWcL9mi3g3uh-rS_etFjCSegyNVxxP8MA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/gestao-itens/itens/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"gestao-itens",
+								"itens",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar item",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvdGF2aW8iLCJpYXQiOjE3MDY3OTk4NzcsImV4cCI6MTcwNjgwMTMxN30.8OT_wVtF2UtWcL9mi3g3uh-rS_etFjCSegyNVxxP8MA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Playstation 5\",\n    \"preco\": 4500\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/gestao-itens/itens",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"gestao-itens",
+								"itens"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar item",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvdGF2aW8iLCJpYXQiOjE3MDY3OTk4NzcsImV4cCI6MTcwNjgwMTMxN30.8OT_wVtF2UtWcL9mi3g3uh-rS_etFjCSegyNVxxP8MA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Playstation 5 - Slim\",\n    \"preco\": 4000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/gestao-itens/itens/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"gestao-itens",
+								"itens",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
