@@ -7,6 +7,31 @@
 	},
 	"item": [
 		{
+			"name": "Gestão de itens",
+			"item": [
+				{
+					"name": "Ping",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/gestao-itens/ping",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"gestao-itens",
+								"ping"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "API Cadastrar usuário",
 			"request": {
 				"method": "POST",
