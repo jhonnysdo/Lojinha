@@ -11,8 +11,8 @@
 	<groupId>br.com.fiap</groupId>
 	<artifactId>challenge-ecommerce-carrinho-de-compras</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>challenge-ecommerce-gestao-itens</name>
-	<description>FIAP Tech-challenge 5: e-commerce gestão de itens</description>
+	<name>challenge-ecommerce-carrinho-de-compras</name>
+	<description>FIAP Tech-challenge 5: e-commerce carrinho de compras</description>
 	<properties>
 		<java.version>21</java.version>
 	</properties>
