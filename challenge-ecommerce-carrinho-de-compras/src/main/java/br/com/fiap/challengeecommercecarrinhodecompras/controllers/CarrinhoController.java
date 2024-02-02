@@ -1,11 +1,13 @@
 package br.com.fiap.challengeecommercecarrinhodecompras.controllers;
 
+import br.com.fiap.challengeecommercecarrinhodecompras.dto.ItemCarrinhoDTO;
 import br.com.fiap.challengeecommercecarrinhodecompras.entity.ItemCarrinho;
 import br.com.fiap.challengeecommercecarrinhodecompras.exceptions.ItemNotFoundException;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.CarrinhoService;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.JwtService;
+import br.com.fiap.challengeecommercecarrinhodecompras.services.ProdutoService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -19,8 +21,8 @@ import java.util.List;
 public class CarrinhoController {
 
     private CarrinhoService carrinhoService;
-    JwtService jwtService;
-    private RestTemplate restTemplate;
+    private JwtService jwtService;
+    private ProdutoService produtoService;
 
     @GetMapping
     public List<ItemCarrinho> listarItensCarrinho(@RequestParam String username) {
@@ -28,40 +30,20 @@ public class CarrinhoController {
     }
 
     @PostMapping
-    public ItemCarrinho adicionarItemCarrinho(@RequestBody ItemCarrinho itemCarrinho, @RequestHeader(value = "Authorization") String authorizationHeader) {
+    public ItemCarrinho adicionarItemCarrinho(@Valid @RequestBody ItemCarrinhoDTO itemCarrinhoDTO, @RequestHeader(value = "Authorization") String authorizationHeader) {
         var jwtToken = authorizationHeader.substring(7);
-        itemCarrinho.setUsername(jwtService.extractUsername(jwtToken));
 
-        // Cria um objeto HttpHeaders e configura o cabeçalho Authorization
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", authorizationHeader); // Reutiliza o cabeçalho Authorization recebido
+        ItemCarrinho itemCarrinho = ItemCarrinho.builder()
+                .produtoId(itemCarrinhoDTO.getProdutoId())
+                .quantidade(itemCarrinhoDTO.getQuantidade())
+                .username(jwtService.extractUsername(jwtToken))
+                .build();
 
-        // Cria um HttpEntity com os cabeçalhos (corpo pode ser null, já que estamos fazendo um GET)
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        try {
-            // Faz a chamada GET incluindo o cabeçalho
-            ResponseEntity<String> response = restTemplate.exchange(
-                    "http://localhost:8081/gestao-itens/itens/" + itemCarrinho.getProdutoId(),
-                    HttpMethod.GET,
-                    entity,
-                    String.class);
-
-            if (response.getStatusCode().is2xxSuccessful()) {
-                return carrinhoService.adicionarItemCarrinho(itemCarrinho);
-            } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
-                throw new ItemNotFoundException(itemCarrinho.getProdutoId());
-            } else {
-                // Lidar com outros códigos de status de erro, se necessário
-                throw new RuntimeException("Erro ao chamar o serviço de itens.");
-            }
-        } catch (HttpClientErrorException ex) {
-            if (ex.getStatusCode() == HttpStatus.NOT_FOUND) {
-                throw new ItemNotFoundException(itemCarrinho.getProdutoId());
-            } else {
-                // Lidar com outros erros de cliente, se necessário
-                throw new RuntimeException("Erro ao chamar o serviço de itens.", ex);
-            }
+        ResponseEntity<String> response = produtoService.fetchProduto(itemCarrinho.getProdutoId(), authorizationHeader);
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return carrinhoService.adicionarItemCarrinho(itemCarrinho);
+        } else {
+            throw new RuntimeException("Erro ao chamar o serviço de itens.");
         }
     }
 

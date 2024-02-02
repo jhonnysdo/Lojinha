@@ -6,13 +6,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class PingController {
+
+    private static final String ALIVE_RESPONSE = "Alive!";
+
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/ping")
-    public String test() {
-        try {
-            return "Alive!";
-        } catch (Exception e){
-            throw new RuntimeException(e);
-        }
+    public String pingResponse() {
+        return ALIVE_RESPONSE;
     }
 }

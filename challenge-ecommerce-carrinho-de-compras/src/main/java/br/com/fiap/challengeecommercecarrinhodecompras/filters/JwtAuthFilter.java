@@ -5,11 +5,13 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.http2.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.*;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -19,44 +21,89 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Component
+@AllArgsConstructor
+@Slf4j
+// https://www.baeldung.com/spring-rest-template-error-handling
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    @Autowired
     private JwtService jwtService;
 
+    private static final String AUTH_HEADER_PREFIX = "Bearer ";
     private final String AUTH_URL = "http://localhost:8080/api/v1/auth/validate";
-
+    private static final HttpStatus UNAUTHORIZED_STATUS = HttpStatus.FORBIDDEN;
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        final String authHeader = request.getHeader("Authorization");
-        final String jwtToken;
+        Optional<String> authHeader = getAuthHeader(request);
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            response.setStatus(403);
+        if (authHeader.isEmpty()) {
+            response.setStatus(UNAUTHORIZED_STATUS.value());
             return;
         }
 
-        jwtToken = authHeader.substring(7);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(jwtToken);
-        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        String jwtToken = authHeader.get();
+        if (!isTokenValid(jwtToken)) {
+            response.setStatus(UNAUTHORIZED_STATUS.value());
+            response.getWriter().write("Authorization token invalido ou expirado.");
+            return;
+        }
 
+        UsernamePasswordAuthenticationToken token = createAuthenticationToken(jwtToken);
+        SecurityContextHolder.getContext().setAuthentication(token);
+        filterChain.doFilter(request, response);
+    }
+
+    private Optional<String> getAuthHeader(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith(AUTH_HEADER_PREFIX)) {
+            return Optional.empty();
+        }
+        return Optional.of(authHeader.substring(AUTH_HEADER_PREFIX.length()));
+    }
+
+    private boolean isTokenValid(String jwtToken) {
+        HttpHeaders headers = createAuthHeaders(jwtToken);
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
         try {
             ResponseEntity<Void> authResponse = restTemplate.exchange(AUTH_URL, HttpMethod.GET, entity, Void.class);
-            if (authResponse.getStatusCode().is2xxSuccessful()) {
-                String username = jwtService.extractUsername(jwtToken);
-                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
-                SecurityContextHolder.getContext().setAuthentication(token);
 
-                filterChain.doFilter(request, response);
+            // Verifique o código de status da resposta
+            HttpStatusCode statusCode = authResponse.getStatusCode();
+
+            if (statusCode.is2xxSuccessful()) {
+                return true; // Token válido
+            } else if (statusCode == HttpStatus.FORBIDDEN) {
+                // O token está expirado, você pode tratar aqui
+                return false;
+            } else {
+                // Tratar outros códigos de status, se necessário
+                return false;
             }
-        } catch (HttpClientErrorException e) {
-            response.setStatus(403);
-            return;
+        } catch (Exception e) {
+            // A exceção HttpClientErrorException$Forbidden é lançada quando o restTemplate.exchange recebe a resposta HTTP com código 403.
+            // https://www.baeldung.com/spring-rest-template-error-handling
+            log.error(e.getMessage());
+            return false;
         }
+    }
+
+    private HttpHeaders createAuthHeaders(String jwtToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(jwtToken);
+        headers.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("scope", "api");
+
+
+        return headers;
+    }
+
+    private UsernamePasswordAuthenticationToken createAuthenticationToken(String jwtToken) {
+        String username = jwtService.extractUsername(jwtToken);
+        return new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
     }
 }
