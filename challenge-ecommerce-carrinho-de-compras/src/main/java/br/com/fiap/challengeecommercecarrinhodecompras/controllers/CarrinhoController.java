@@ -2,7 +2,6 @@ package br.com.fiap.challengeecommercecarrinhodecompras.controllers;
 
 import br.com.fiap.challengeecommercecarrinhodecompras.dto.ItemCarrinhoDTO;
 import br.com.fiap.challengeecommercecarrinhodecompras.entity.ItemCarrinho;
-import br.com.fiap.challengeecommercecarrinhodecompras.exceptions.ItemNotFoundException;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.CarrinhoService;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.JwtService;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.ProdutoService;
@@ -10,8 +9,6 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -48,8 +45,8 @@ public class CarrinhoController {
     }
 
     @DeleteMapping("/{id}")
-    public String removerItemCarrinho(@PathVariable Long id) {
+    public ResponseEntity<String> removerItemCarrinho(@PathVariable Long id) {
         carrinhoService.removerItemCarrinho(id);
-        return "Item removido com sucesso.";
+        return ResponseEntity.ok("Item removido com sucesso.");
     }
 }
