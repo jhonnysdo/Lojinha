@@ -9,7 +9,15 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class ProdutoService {
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
+
+    public ProdutoService() {
+        this.restTemplate = new RestTemplate();
+    }
+
+    public ProdutoService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     public ResponseEntity<String> fetchProduto(Long produtoId, String authorizationHeader) {
         HttpHeaders headers = new HttpHeaders();
