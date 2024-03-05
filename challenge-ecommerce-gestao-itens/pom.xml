@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.fiap</groupId>
-	<artifactId>challenge-ecommerce-carrinho-de-compras</artifactId>
+	<artifactId>challenge-ecommerce-gestao-itens</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>challenge-ecommerce-gestao-itens</name>
 	<description>FIAP Tech-challenge 5: e-commerce gestão de itens</description>
@@ -54,6 +54,13 @@
 			<artifactId>spring-restdocs-mockmvc</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.2.0</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
