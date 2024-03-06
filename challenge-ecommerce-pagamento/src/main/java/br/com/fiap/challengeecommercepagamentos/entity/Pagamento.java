@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class Pagamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private LocalDate dataPagamento;
     @NotNull(message = "A Forma de Pagamento não pode ser nulo")
     @Enumerated(EnumType.STRING)

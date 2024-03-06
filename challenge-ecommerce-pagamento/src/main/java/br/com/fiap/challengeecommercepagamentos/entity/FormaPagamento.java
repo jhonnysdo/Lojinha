@@ -15,7 +15,7 @@ import lombok.Setter;
 public class FormaPagamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private TipoFormaPagamento tipoFormaPagamento;
     @NotNull(message = "O nome de usuário não pode ser nulo nem branco.")
     private String usuario;

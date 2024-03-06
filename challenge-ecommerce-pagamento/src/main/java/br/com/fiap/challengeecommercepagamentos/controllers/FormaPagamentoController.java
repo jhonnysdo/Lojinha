@@ -1,31 +1,45 @@
 package br.com.fiap.challengeecommercepagamentos.controllers;
 
-import br.com.fiap.challengeecommercepagamentos.dto.request.FormaDePagamentoDTO;
-import br.com.fiap.challengeecommercepagamentos.entity.Pagamento;
+import br.com.fiap.challengeecommercepagamentos.dto.request.FormaPagamentoDTO;
+import br.com.fiap.challengeecommercepagamentos.entity.FormaPagamento;
+import br.com.fiap.challengeecommercepagamentos.repository.FormaPagamentoRepository;
+import br.com.fiap.challengeecommercepagamentos.services.FormaPagamentoService;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@AllArgsConstructor
+@RestController
+@RequestMapping("/formas-pagamento")
+
 public class FormaPagamentoController {
+
+    private final FormaPagamentoService formaPagamentoService;
+
     @PostMapping
-    public ResponseEntity<FormaDePagamentoDTO> cadastrarFormaPagamento(@RequestBody FormaDePagamentoDTO formaPagamentoDTO){
+    public ResponseEntity<FormaPagamentoDTO> cadastrarFormaPagamento(@RequestBody FormaPagamentoDTO formaPagamentoDTO) {
         return null;
     }
 
     @GetMapping
-    public List<Pagamento> listarFormasPagamento (){
-        return null;
+    public ResponseEntity<List<FormaPagamento>> listarFormasPagamento() {
+     return new ResponseEntity<>(formaPagamentoService.listarFormasPagamento(),HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<Pagamento> editarFormaPagamento (){
+    public ResponseEntity<FormaPagamento> editarFormaPagamento() {
         return null;
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> removerFormaPagamento(){
-        return null;
-    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void>removerFormaPagamento(@PathVariable String id) {
+       formaPagamentoService.removerFormaPagamento(id);
+       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+}
 
 }
