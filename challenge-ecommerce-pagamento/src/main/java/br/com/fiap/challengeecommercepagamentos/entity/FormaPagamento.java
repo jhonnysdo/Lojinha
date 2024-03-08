@@ -16,6 +16,7 @@ public class FormaPagamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
+    private String descricao;
     private TipoFormaPagamento tipoFormaPagamento;
     @NotNull(message = "O nome de usuário não pode ser nulo nem branco.")
     private String usuario;
