@@ -6,15 +6,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class PingController {
-    @PreAuthorize("hasAnyAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/ping")
-        public String test(){
-        try{
+    public String test() {
+        try {
             return "Alive!";
 
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        }
+    }
 }
 
