@@ -10,7 +10,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartaoDebitoDTO {
+public class CartaoDTO {
+    @NotNull(message = "O ID Do cartão não pode ser nulo.")
+    private String idCartao;
     @NotNull(message = "O Numero do Cartão não pode estar vazio.")
     private String numeroCartao;
     @NotNull(message = "A Data de Vencimento do Cartão não pode estar vazia.")
@@ -19,4 +21,6 @@ public class CartaoDebitoDTO {
     private String codigoSeguranca;
     @NotNull(message = "O Nome do Responsável do Cartão não pode estar vazio.")
     private String nomeResponsavel;
+    @NotNull(message = "")
+    private String tipoFormaPagamento;
 }
