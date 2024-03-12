@@ -1,25 +1,20 @@
 package br.com.fiap.challengeecommercepagamentos.entity;
 
 import br.com.fiap.challengeecommercepagamentos.enums.TipoFormaPagamento;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import br.com.fiap.challengeecommercepagamentos.services.FormaPagamentoService;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+
 import lombok.Setter;
 @Entity
+@Table(name = "tb_cartao")
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class Cartao{
+public class Cartao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull(message = "O ID Do cartão não pode ser nulo.")
-    private String idCartao;
+    private Long idCartao;
     @NotNull(message = "O Numero do Cartão não pode estar vazio.")
     private String numeroCartao;
     @NotNull(message = "A Data de Vencimento do Cartão não pode estar vazia.")
@@ -28,7 +23,7 @@ public class Cartao{
     private String codigoSeguranca;
     @NotNull(message = "O Nome do Responsável do Cartão não pode estar vazio.")
     private String nomeResponsavel;
+    @Enumerated(EnumType.STRING)
     private TipoFormaPagamento tipoFormaPagamento;
-
 
 }

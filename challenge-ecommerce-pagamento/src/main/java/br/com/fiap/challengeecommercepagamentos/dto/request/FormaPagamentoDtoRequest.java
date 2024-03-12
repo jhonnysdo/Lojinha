@@ -5,9 +5,7 @@ import lombok.*;
 
 @Setter
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode
+
 public class FormaPagamentoDtoRequest {
 
     private String descricao;

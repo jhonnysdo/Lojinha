@@ -1,10 +1,8 @@
 package br.com.fiap.challengeecommercepagamentos.services;
 
-import br.com.fiap.challengeecommercepagamentos.dto.request.FormaPagamentoDtoRequest;
 import br.com.fiap.challengeecommercepagamentos.dto.request.formasPagamentosDTO.CartaoDTO;
 import br.com.fiap.challengeecommercepagamentos.entity.Cartao;
-import br.com.fiap.challengeecommercepagamentos.entity.FormaPagamento;
-import br.com.fiap.challengeecommercepagamentos.enums.TipoFormaPagamento;
+
 import br.com.fiap.challengeecommercepagamentos.mapper.CartaoMapper;
 import br.com.fiap.challengeecommercepagamentos.mapper.FormaPagamentoMapper;
 import br.com.fiap.challengeecommercepagamentos.repository.CartaoRepository;
@@ -41,7 +39,7 @@ public class FormaPagamentoService {
     }
 
 
-    public CartaoDTO editarFormaPagamento(String id, CartaoDTO cartaoDTO) {
+    public CartaoDTO editarFormaPagamento(Long id, CartaoDTO cartaoDTO) {
         Optional<Cartao> cartaoOptional = cartaoRepository.findById(id);
         if (cartaoOptional.isPresent()) {
             Cartao cartao = cartaoOptional.get();
@@ -58,7 +56,7 @@ public class FormaPagamentoService {
         return new CartaoDTO();
     }
 
-    public void removerFormaPagamento(String id) {
+    public void removerFormaPagamento(Long id) {
         formaPagamentoRepository.deleteById(id);
     }
 

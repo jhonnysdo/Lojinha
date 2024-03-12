@@ -1,5 +1,8 @@
 package br.com.fiap.challengeecommercepagamentos.dto.request.formasPagamentosDTO;
 
+import br.com.fiap.challengeecommercepagamentos.enums.TipoFormaPagamento;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,10 +11,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class CartaoDTO {
-    @NotNull(message = "O ID Do cartão não pode ser nulo.")
     private String idCartao;
     @NotNull(message = "O Numero do Cartão não pode estar vazio.")
     private String numeroCartao;
@@ -21,6 +21,7 @@ public class CartaoDTO {
     private String codigoSeguranca;
     @NotNull(message = "O Nome do Responsável do Cartão não pode estar vazio.")
     private String nomeResponsavel;
-    @NotNull(message = "")
-    private String tipoFormaPagamento;
+    @NotNull(message = "O Tipo de da Forma de Pagamento não pode ser Nulo.")
+
+    private TipoFormaPagamento tipoFormaPagamento;
 }

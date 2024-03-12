@@ -38,13 +38,13 @@ public class FormaPagamentoController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<CartaoDTO> editarFormaPagamento(@RequestBody CartaoDTO cartaoDTO, @PathVariable String idCartao) {
-        var cartaoAtualizado = formaPagamentoService.editarFormaPagamento(idCartao, cartaoDTO);
+    public ResponseEntity<CartaoDTO> editarFormaPagamento(@RequestBody CartaoDTO cartaoDTO, @PathVariable Long id) {
+        var cartaoAtualizado = formaPagamentoService.editarFormaPagamento(id, cartaoDTO);
         return ResponseEntity.ok(cartaoAtualizado);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removerFormaPagamento(@PathVariable String id) {
+    public ResponseEntity<Void> removerFormaPagamento(@PathVariable Long id) {
         formaPagamentoService.removerFormaPagamento(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
