@@ -5,7 +5,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -23,12 +22,16 @@ import java.util.ArrayList;
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    @Autowired
     private JwtService jwtService;
 
     private final String AUTH_URL = "http://localhost:8080/api/v1/auth/validate";
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
+
+    public JwtAuthFilter(JwtService jwtService, RestTemplate restTemplate) {
+        this.jwtService = jwtService;
+        this.restTemplate = restTemplate;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -56,7 +59,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         } catch (HttpClientErrorException e) {
             response.setStatus(403);
-            return;
         }
     }
 }
