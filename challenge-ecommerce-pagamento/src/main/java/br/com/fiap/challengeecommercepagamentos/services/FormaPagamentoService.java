@@ -10,20 +10,24 @@ import br.com.fiap.challengeecommercepagamentos.repository.FormaPagamentoReposit
 
 import lombok.AllArgsConstructor;
 
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
-@Service
 @AllArgsConstructor
+@Service
 public class FormaPagamentoService {
-
+    @Lazy
     private final FormaPagamentoRepository formaPagamentoRepository;
-    private final FormaPagamentoMapper formaPagamentoMapper;
+    @Lazy
     private final CartaoMapper cartaoMapper;
+    @Lazy
     private final CartaoRepository cartaoRepository;
 
 
@@ -33,10 +37,23 @@ public class FormaPagamentoService {
     }
 
     public List<CartaoDTO> listarCartoes() {
-    List<Cartao> cartoes = cartaoRepository.findAll();
-    return cartoes.stream().map(cartaoMapper::toDTO)
-            .collect(Collectors.toList());
+        List<Cartao> cartoes = cartaoRepository.findAll();
+        return cartoes.stream().map(cartaoMapper::toDTO)
+                .collect(Collectors.toList());
     }
+
+    public CartaoDTO buscarCartaoPorId(Long id) {
+        Optional<Cartao> cartaoOptional = cartaoRepository.findById(id);
+        if (cartaoOptional.isPresent()) {
+            return cartaoMapper.toDTO(cartaoOptional.get());
+        }
+        return new CartaoDTO();
+
+    }
+
+//    public ResponseEntity<?> buscarFormaPagamentoPorUsername(String username) {
+//        return ResponseEntity.ok(formaPagamentoRepository.findByUsername(username));
+//    }
 
 
     public CartaoDTO editarFormaPagamento(Long id, CartaoDTO cartaoDTO) {

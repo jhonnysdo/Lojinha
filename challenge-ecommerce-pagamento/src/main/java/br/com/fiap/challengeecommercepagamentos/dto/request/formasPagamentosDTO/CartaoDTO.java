@@ -1,5 +1,6 @@
 package br.com.fiap.challengeecommercepagamentos.dto.request.formasPagamentosDTO;
 
+import br.com.fiap.challengeecommercepagamentos.enums.StatusPagamento;
 import br.com.fiap.challengeecommercepagamentos.enums.TipoFormaPagamento;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -22,6 +23,9 @@ public class CartaoDTO {
     @NotNull(message = "O Nome do Responsável do Cartão não pode estar vazio.")
     private String nomeResponsavel;
     @NotNull(message = "O Tipo de da Forma de Pagamento não pode ser Nulo.")
-
     private TipoFormaPagamento tipoFormaPagamento;
+
+    private double valor;
+
+    private StatusPagamento statusPagamento;
 }

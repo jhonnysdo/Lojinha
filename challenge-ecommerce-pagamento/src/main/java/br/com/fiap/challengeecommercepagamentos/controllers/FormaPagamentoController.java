@@ -34,8 +34,11 @@ public class FormaPagamentoController {
         return ResponseEntity.ok(cartoes);
 
     }
-
-
+    @PostMapping("/{id}")
+    public ResponseEntity<CartaoDTO> buscarCartaoPorId(@PathVariable Long id) {
+        var cartao = formaPagamentoService.buscarCartaoPorId(id);
+        return ResponseEntity.ok(cartao);
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<CartaoDTO> editarFormaPagamento(@RequestBody CartaoDTO cartaoDTO, @PathVariable Long id) {

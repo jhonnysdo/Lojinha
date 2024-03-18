@@ -8,7 +8,7 @@ import lombok.Getter;
 
 import lombok.Setter;
 @Entity
-@Table(name = "tb_cartao")
+@Table(name = "tb_cartaos")
 @Getter
 @Setter
 public class Cartao {
@@ -25,5 +25,7 @@ public class Cartao {
     private String nomeResponsavel;
     @Enumerated(EnumType.STRING)
     private TipoFormaPagamento tipoFormaPagamento;
+    @NotNull(message = "O nome de usuário não pode ser nulo nem branco.")
+    private String username;
 
 }
