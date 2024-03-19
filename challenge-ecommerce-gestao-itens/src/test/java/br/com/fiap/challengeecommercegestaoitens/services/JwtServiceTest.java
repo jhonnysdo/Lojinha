@@ -47,19 +47,10 @@ public class JwtServiceTest {
         Key signKey = jwtService.getSignKey();
         assertEquals(Keys.hmacShaKeyFor(SECRET.getBytes()), signKey);
     }
-    //@Test
-    //public void testExtractUsername() {
-        // Mock do token e das reivindicações
-        //String token = "357638792F423F4428472B4B6250655368566D597133743677397A2443264629";
-        //Claims claims = mock(Claims.class);
-        //when(claims.getSubject()).thenReturn("Jhonny");
 
-        JwtService jwtService = new JwtService();
+}
 
-        // Chama o método para extrair o nome de usuário do token
-        //String username = jwtService.extractUsername(token);
 
-        // Verifica se o nome de usuário retornado é igual ao esperado
-        //assertEquals("Jhonny", username);
-    }
+
+
 
