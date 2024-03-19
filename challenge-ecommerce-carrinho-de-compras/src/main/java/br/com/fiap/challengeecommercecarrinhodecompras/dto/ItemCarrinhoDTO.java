@@ -14,4 +14,6 @@ public class ItemCarrinhoDTO {
 
     @Min(value = 1, message = "A quantidade deve ser pelo menos 1")
     private int quantidade;
+    @NotNull(message = "O preço não pode ser nulo")
+    private Double preco;
 }
