@@ -13,4 +13,6 @@ public interface CartaoMapper {
     Cartao toEntity(CartaoDTO cartaoDTO);
 
     List<CartaoDTO> toDTO(List<Cartao> cartoes);
+
+
 }
