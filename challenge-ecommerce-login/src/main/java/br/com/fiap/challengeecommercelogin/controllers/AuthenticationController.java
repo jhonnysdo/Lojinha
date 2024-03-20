@@ -6,6 +6,8 @@ import br.com.fiap.challengeecommercelogin.dao.response.JwtAuthenticationRespons
 import br.com.fiap.challengeecommercelogin.services.JwtService;
 import br.com.fiap.challengeecommercelogin.services.UserService;
 import br.com.fiap.challengeecommercelogin.services.interfaces.AuthenticationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
@@ -19,21 +21,25 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@Tag(name = "Authentication", description = "Endpoints para autenticação de usuários.")
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;
     private final UserService userService;
 
+    @Operation(summary = "Cadastrar um novo usuário", description = "Cadastra um novo usuário no sistema.")
     @PostMapping("/signup")
     public ResponseEntity<JwtAuthenticationResponse> signup(@RequestBody SignUpRequest request) {
         return ResponseEntity.ok(authenticationService.signup(request));
     }
 
+    @Operation(summary = "Realizar login", description = "Realiza o login de um usuário no sistema.")
     @PostMapping("/signin")
     public ResponseEntity<JwtAuthenticationResponse> signin(@RequestBody SigninRequest request) {
         return ResponseEntity.ok(authenticationService.signin(request));
     }
 
+    @Operation(summary = "Validar token", description = "Valida um token de autenticação.")
     @GetMapping("/validate")
     public ResponseEntity<String> validate(@RequestHeader("Authorization") String tokenHeader) {
         if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
