@@ -1,11 +1,12 @@
 package br.com.fiap.challengeecommercegestaoitens.controllers;
 
-import br.com.fiap.challengeecommercegestaoitens.entity.Item;
+import br.com.fiap.challengeecommercegestaoitens.dto.ItemDTO;
 import br.com.fiap.challengeecommercegestaoitens.services.ItemService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/itens")
@@ -18,18 +19,18 @@ public class ItemController {
     }
 
     @PostMapping
-    public ResponseEntity<Item> adicionarItem(@RequestBody Item item) {
-        Item salvo = itemService.salvarItem(item);
+    public ResponseEntity<ItemDTO> adicionarItem(@RequestBody ItemDTO item) {
+        ItemDTO salvo = itemService.salvarItem(item);
         return ResponseEntity.ok(salvo);
     }
 
     @GetMapping
-    public ResponseEntity<List<Item>> listarTodos() {
+    public ResponseEntity<List<ItemDTO>> listarTodos() {
         return ResponseEntity.ok(itemService.listarTodos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Item> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<Optional<ItemDTO>> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(itemService.buscarPorId(id));
     }
 
@@ -40,8 +41,8 @@ public class ItemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Item> atualizarItem(@PathVariable Long id, @RequestBody Item item) {
-        Item itemAtualizado = itemService.atualizarItem(id, item);
+    public ResponseEntity<ItemDTO> atualizarItem(@PathVariable Long id, @RequestBody ItemDTO itemDto) {
+        ItemDTO itemAtualizado = itemService.atualizarItem(id, itemDto);
         return ResponseEntity.ok(itemAtualizado);
     }
 }

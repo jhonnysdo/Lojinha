@@ -15,11 +15,9 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-// https://www.linkedin.com/pulse/implementing-spring-security-across-microservices-william-haywood/
 public class WebSecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
-    // private final AuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

@@ -1,8 +1,10 @@
 package br.com.fiap.challengeecommercegestaoitens.exceptions;
 
-public class ItemNotFoundException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
+
+public class ItemNotFoundException extends HttpClientErrorException {
     public ItemNotFoundException(Long id) {
-        super("Item não encontrado com ID: " + id);
+        super(HttpStatus.NOT_FOUND, "Item com id " + id + " não encontrado");
     }
 }
-

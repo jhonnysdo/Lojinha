@@ -12,7 +12,6 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Item {
 
     @Id
@@ -21,4 +20,5 @@ public class Item {
 
     private String nome;
     private Double preco;
+    private Integer quantidade;
 }

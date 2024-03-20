@@ -1,6 +1,7 @@
 package br.com.fiap.challengeecommercegestaoitens.controller;
 
 import br.com.fiap.challengeecommercegestaoitens.controllers.ItemController;
+import br.com.fiap.challengeecommercegestaoitens.dto.ItemDTO;
 import br.com.fiap.challengeecommercegestaoitens.entity.Item;
 import br.com.fiap.challengeecommercegestaoitens.services.ItemService;
 import org.junit.jupiter.api.Test;
@@ -21,9 +22,9 @@ public class ItemControllerTest {
         ItemService mockItemService = mock(ItemService.class);
         
         // Prepare data for testing
-        Item item1 = new Item();
-        Item item2 = new Item();
-        List<Item> expectedItems = Arrays.asList(item1, item2);
+        ItemDTO item1 = new ItemDTO();
+        ItemDTO item2 = new ItemDTO();
+        List<ItemDTO> expectedItems = Arrays.asList(item1, item2);
         
         // Define the behavior of the mock object
         when(mockItemService.listarTodos()).thenReturn(expectedItems);
@@ -31,7 +32,7 @@ public class ItemControllerTest {
         ItemController itemController = new ItemController(mockItemService);
 
         // Call the method under test
-        ResponseEntity<List<Item>> responseEntity = itemController.listarTodos();
+        ResponseEntity<List<ItemDTO>> responseEntity = itemController.listarTodos();
         
         // Verify the result
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
