@@ -6,59 +6,34 @@ Este projeto é um sistema de e-commerce desenvolvido com o framework Spring Boo
 ## Features
 O sistema é composto por várias APIs:
 
-- 👤**API Login**: Gerencia os dados do cliente.
+- 👤**Microsserviço Autenticação de Usuários**: Gerencia os dados do Usuário.
 ```shell
-curl --location 'http://localhost:8080/booking/api/clientes' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "nomeCompleto":"Jack Sparrow",
-    "dataNascimento": "2023-04-12",
-    "cpf": "48464167040",
-    "sexo": "MASCULINO",
-    "email": "jackzinho_matadordedragao@gmail.com",
-    "telefone": "(11) 1234-1234",
-    "paisDeOrigem": "Brasil",
-    "endereco": "Rua dos alfineiros, 61"
-}'
-```
-- 📒**API Localidade**: Gerencia os dados de localização.
-```shell
-curl --location 'http://localhost:8080/booking/api/localidades'
-```
-- 🏨**API Prédio**: Gerencia os dados do prédio.
-```shell
-curl --location 'http://localhost:8080/booking/api/predios' \
+curl --location 'http://localhost:8080/api/v1/auth/signup' \
 --header 'Content-Type: application/json' \
 --data '{
-    "nome":"Localidade 2",
-    "localidadeId": 1
+    "username": "usuario",
+    "password": "senha"
 }'
 ```
-- 😴**API Quarto**: Gerencia os dados do quarto.
+- 🛒**Microsserviço Carrinho de compras**: Gerencia o carrinho de compras.
 ```shell
-curl --location 'http://localhost:8080/booking/api/quartos'
+curl --location 'http://localhost:8082/carrinho-de-compras/carrinho?username=usuario'
 ```
-- 📅**API Reserva**: Gerencia os dados de reserva.
+- 📦**Microsserviço Gestão de Itens**: Gerencia itens.
 ```shell
-curl --location 'http://localhost:8080/booking/api/reservas' \
+curl --location 'http://localhost:8081/gestao-itens/itens' \
 --header 'Content-Type: application/json' \
 --data '{
-  "clienteId": 1,
-  "dataEntrada": "2023-05-01",
-  "dataSaida": "2023-05-05",
-  "quartosIds": [1, 2],
-  "servicosOpcionais": ["Jantar","Café da manhã"]
+    "nome": "Playstation 5",
+    "preco": 4500
 }'
 ```
-- 🍴**API Serviço Opcional**: Gerencia os dados de serviços opcionais.
+- 💵**Microsserviço Pagamentos**: Gerencia os dados do quarto.
 ```shell
-curl --location 'http://localhost:8080/booking/api/servicos-opcionais'
+curl --location 'http://localhost:8083/pagamentos/formas-pagamento' 
 ```
-- 🪒 **API Administrativa de bloqueio/desbloqueio de quartos**: Gerencia os dados de reserva de um quarto administrativamente
-```shell
-curl --location --request POST 'http://localhost:8080/booking/api/quartos/2/admin/bloquear'
-curl --location --request POST 'http://localhost:8080/booking/api/quartos/2/admin/bloquear'
-```
+
+
 Importante: para consultar todas as opções de APIs, favor acessar a collection POSTMAN disponibilizada:
 
 - [FIAP - Booking.postman_collection.json](src%2Fmain%2Fresources%2FFIAP%20-%20Booking.postman_collection.json)
