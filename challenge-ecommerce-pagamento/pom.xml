@@ -112,21 +112,6 @@
             <artifactId>mapstruct</artifactId>
             <version>${org.mapstruct.version}</version>
         </dependency>
-        <dependency>
-            <groupId>br.com.fiap</groupId>
-            <artifactId>challenge-ecommerce-carrinho-de-compras</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-            <exclusions>
-				<exclusion>
-					<groupId>br.com.fiap</groupId>
-					<artifactId>challenge-ecommerce-pagamento</artifactId>
-				</exclusion>
-			</exclusions>
-        </dependency>
-
-        
-
     </dependencies>
     <dependencyManagement>
         <dependencies>

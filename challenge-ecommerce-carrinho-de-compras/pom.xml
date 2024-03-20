@@ -92,18 +92,6 @@
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-jackson</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>br.com.fiap</groupId>
-			<artifactId>challenge-ecommerce-pagamento</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<scope>compile</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>br.com.fiap</groupId>
-					<artifactId>challenge-ecommerce-carrinho-de-compras</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
 	</dependencies>
 
 	<dependencyManagement>

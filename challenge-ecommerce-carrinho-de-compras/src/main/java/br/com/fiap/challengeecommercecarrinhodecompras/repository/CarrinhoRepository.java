@@ -7,6 +7,4 @@ import java.util.List;
 
 public interface CarrinhoRepository extends JpaRepository<ItemCarrinho, Long> {
     List<ItemCarrinho> findByUsername(String username);
-
-    List<ItemCarrinho> findByUsernameAndFechado(String username, boolean fechado);
 }

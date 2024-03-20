@@ -20,12 +20,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Carrinho {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    private List<ItemCarrinho> itens;
     @NotNull(message = "O nome de usuário não pode ser nulo nem branco.")
     private String username;
     private boolean fechado;
