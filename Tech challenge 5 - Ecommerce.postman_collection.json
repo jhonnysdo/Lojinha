@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "0d46ea6e-96f9-4e39-ab8e-c78590b8dece",
+		"_postman_id": "9f7aafd4-e270-41ce-bfe6-40966a1b7a3b",
 		"name": "Tech challenge 5 - Ecommerce",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "27681645",
-		"_collection_link": "https://warped-meteor-302132.postman.co/workspace/API-E-Commerce~5769ea1f-d65e-4e1e-a776-57d5917b3cf6/collection/27681645-0d46ea6e-96f9-4e39-ab8e-c78590b8dece?action=share&source=collection_link&creator=27681645"
+		"_exporter_id": "2416879",
+		"_collection_link": "https://warped-meteor-302132.postman.co/workspace/FIAP---Hackaton~94971455-a2b0-4e84-a2de-73775d91e8c4/collection/2416879-9f7aafd4-e270-41ce-bfe6-40966a1b7a3b?action=share&source=collection_link&creator=2416879"
 	},
 	"item": [
 		{
@@ -438,7 +438,10 @@
 					"name": "Remover Cartao",
 					"request": {
 						"method": "DELETE",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": ""
+						}
 					},
 					"response": []
 				}
@@ -454,7 +457,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"usuario\",\n    \"password\": \"senha\"\n}",
+							"raw": "{\n    \"username\": \"otavio\",\n    \"password\": \"otavio\",\n    \"role\": \"ADMIN\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
