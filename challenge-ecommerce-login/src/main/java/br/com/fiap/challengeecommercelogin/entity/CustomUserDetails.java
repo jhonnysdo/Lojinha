@@ -1,8 +1,10 @@
 package br.com.fiap.challengeecommercelogin.entity;
 
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import br.com.fiap.challengeecommercelogin.enums.Role;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,21 +14,21 @@ import java.util.List;
 public class CustomUserDetails extends User implements UserDetails {
     private String username;
     private String password;
+
+    @Getter
+    private Role role;
+
     private Collection<? extends GrantedAuthority> authorities;
 
     public CustomUserDetails(User byUsername) {
         this.username = byUsername.getUsername();
         this.password= byUsername.getPassword();
+        this.role = byUsername.getRole();
         List<GrantedAuthority> auths = new ArrayList<>();
 
-//        for(UserRole role : byUsername.getRoles()){
-//            auths.add(new SimpleGrantedAuthority(role.getName().toUpperCase()));
-//        }
         if (byUsername.getRole() != null) {
             auths.add(new SimpleGrantedAuthority(byUsername.getRole().name().toUpperCase()));
         } else {
-            // Lida com o caso em que 'role' é nulo (por exemplo, atribua uma autoridade padrão)
-            // authority = new SimpleGrantedAuthority("ROLE_DEFAULT");
             auths.add(new SimpleGrantedAuthority("USER"));
         }
         this.authorities = auths;

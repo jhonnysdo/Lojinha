@@ -1,5 +1,6 @@
 package br.com.fiap.challengeecommercelogin.filters;
 
+import br.com.fiap.challengeecommercelogin.entity.CustomUserDetails;
 import br.com.fiap.challengeecommercelogin.services.UserService;
 import br.com.fiap.challengeecommercelogin.services.JwtService;
 import jakarta.servlet.FilterChain;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -58,7 +58,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 username = jwtService.extractUsername(token);
 
                 if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    UserDetails userDetails = userService.loadUserByUsername(username);
+                    CustomUserDetails userDetails = userService.loadUserByUsername(username);
                     if (Boolean.TRUE.equals(jwtService.isTokenValid(token, userDetails))) {
                         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

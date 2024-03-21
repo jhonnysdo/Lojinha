@@ -3,7 +3,6 @@ package br.com.fiap.challengeecommercecarrinhodecompras.controllers;
 import br.com.fiap.challengeecommercecarrinhodecompras.dto.ItemCarrinhoDTO;
 import br.com.fiap.challengeecommercecarrinhodecompras.entity.ItemCarrinho;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.CarrinhoService;
-import br.com.fiap.challengeecommercecarrinhodecompras.services.JwtService;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.ProdutoService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

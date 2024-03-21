@@ -3,24 +3,24 @@ package br.com.fiap.challengeecommercelogin.controllers;
 import br.com.fiap.challengeecommercelogin.dao.request.SignUpRequest;
 import br.com.fiap.challengeecommercelogin.dao.request.SigninRequest;
 import br.com.fiap.challengeecommercelogin.dao.response.JwtAuthenticationResponse;
+import br.com.fiap.challengeecommercelogin.entity.CustomUserDetails;
 import br.com.fiap.challengeecommercelogin.services.JwtService;
 import br.com.fiap.challengeecommercelogin.services.UserService;
 import br.com.fiap.challengeecommercelogin.services.interfaces.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@RequiredArgsConstructor
+@AllArgsConstructor
+@Slf4j
 @Tag(name = "Authentication", description = "Endpoints para autenticação de usuários.")
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
@@ -29,7 +29,7 @@ public class AuthenticationController {
 
     @Operation(summary = "Cadastrar um novo usuário", description = "Cadastra um novo usuário no sistema.")
     @PostMapping("/signup")
-    public ResponseEntity<JwtAuthenticationResponse> signup(@RequestBody SignUpRequest request) {
+    public ResponseEntity<JwtAuthenticationResponse> signup(@Valid @RequestBody SignUpRequest request) {
         return ResponseEntity.ok(authenticationService.signup(request));
     }
 
@@ -51,7 +51,7 @@ public class AuthenticationController {
 
         try {
             if (StringUtils.isNotEmpty(username)) {
-                UserDetails userDetails = userService.loadUserByUsername(username);
+                CustomUserDetails userDetails = userService.loadUserByUsername(username);
                 if (Boolean.TRUE.equals(jwtService.isTokenValid(token, userDetails))) {
                     return ResponseEntity.ok("Token is valid.");
                 }
