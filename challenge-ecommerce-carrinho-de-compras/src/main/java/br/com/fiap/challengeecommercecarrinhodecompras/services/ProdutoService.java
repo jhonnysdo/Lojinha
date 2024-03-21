@@ -1,5 +1,6 @@
 package br.com.fiap.challengeecommercecarrinhodecompras.services;
 
+import br.com.fiap.challengeecommercecarrinhodecompras.dto.ProdutoDTO;
 import br.com.fiap.challengeecommercecarrinhodecompras.exceptions.ItemNotFoundException;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class ProdutoService {
         this.restTemplate = restTemplate;
     }
 
-    public ResponseEntity<String> fetchProduto(Long produtoId, String authorizationHeader) {
+    public ResponseEntity<ProdutoDTO> fetchProduto(Long produtoId, String authorizationHeader) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", authorizationHeader);
         HttpEntity<String> entity = new HttpEntity<>(headers);
@@ -28,7 +29,7 @@ public class ProdutoService {
             return restTemplate.exchange("http://localhost:8081/gestao-itens/itens/" + produtoId,
                     HttpMethod.GET,
                     entity,
-                    String.class);
+                    ProdutoDTO.class);
 
         } catch (HttpClientErrorException ex) {
             if (ex.getStatusCode() == HttpStatus.NOT_FOUND) {

@@ -18,7 +18,6 @@ import java.util.List;
 public class CarrinhoController {
 
     private CarrinhoService carrinhoService;
-    private JwtService jwtService;
     private ProdutoService produtoService;
 
     @GetMapping
@@ -27,21 +26,14 @@ public class CarrinhoController {
     }
 
     @PostMapping
-    public ItemCarrinho adicionarItemCarrinho(@Valid @RequestBody ItemCarrinhoDTO itemCarrinhoDTO, @RequestHeader(value = "Authorization") String authorizationHeader) {
-        var jwtToken = authorizationHeader.substring(7);
-
-        ItemCarrinho itemCarrinho = ItemCarrinho.builder()
-                .produtoId(itemCarrinhoDTO.getProdutoId())
-                .quantidade(itemCarrinhoDTO.getQuantidade())
-                .username(jwtService.extractUsername(jwtToken))
-                .build();
-
-        ResponseEntity<String> response = produtoService.fetchProduto(itemCarrinho.getProdutoId(), authorizationHeader);
-        if (response.getStatusCode().is2xxSuccessful()) {
-            return carrinhoService.adicionarItemCarrinho(itemCarrinho);
-        } else {
-            throw new RuntimeException("Erro ao chamar o serviço de itens.");
-        }
+    public ResponseEntity<ItemCarrinhoDTO> adicionarItemCarrinho(
+            @Valid @RequestBody ItemCarrinhoDTO itemCarrinhoDTO,
+            @RequestHeader(value = "Authorization") String authorizationHeader
+    ) {
+        return ResponseEntity.ok(carrinhoService.adicionarItemCarrinho(
+                itemCarrinhoDTO,
+                authorizationHeader
+        ));
     }
 
     @DeleteMapping("/{id}")

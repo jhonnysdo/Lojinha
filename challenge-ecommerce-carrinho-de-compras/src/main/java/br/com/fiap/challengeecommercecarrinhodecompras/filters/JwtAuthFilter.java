@@ -37,7 +37,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
+        ) throws ServletException, IOException {
+
         Optional<String> authHeader = getAuthHeader(request);
 
         if (authHeader.isEmpty()) {

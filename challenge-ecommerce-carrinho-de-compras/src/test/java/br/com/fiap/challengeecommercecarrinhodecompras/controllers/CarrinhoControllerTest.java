@@ -1,5 +1,6 @@
 package br.com.fiap.challengeecommercecarrinhodecompras.controllers;
 
+import br.com.fiap.challengeecommercecarrinhodecompras.dto.ProdutoDTO;
 import br.com.fiap.challengeecommercecarrinhodecompras.entity.ItemCarrinho;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.CarrinhoService;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.JwtService;
@@ -66,8 +67,8 @@ class CarrinhoControllerTest {
         itemCarrinho.setUsername("user");
 
         Mockito.when(jwtService.extractUsername(Mockito.anyString())).thenReturn("user");
-        Mockito.when(produtoService.fetchProduto(Mockito.anyLong(), Mockito.anyString())).thenReturn(ResponseEntity.ok(""));
-        Mockito.when(carrinhoService.adicionarItemCarrinho(Mockito.any())).thenReturn(itemCarrinho);
+        Mockito.when(produtoService.fetchProduto(
+                Mockito.anyLong(), Mockito.anyString())).thenReturn(ResponseEntity.ok(new ProdutoDTO()));
 
         mockMvc.perform(post("/carrinho")
                         .header("Authorization", "Bearer token")
