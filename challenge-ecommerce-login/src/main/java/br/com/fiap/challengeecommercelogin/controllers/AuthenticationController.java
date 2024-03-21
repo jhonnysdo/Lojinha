@@ -6,8 +6,10 @@ import br.com.fiap.challengeecommercelogin.dao.response.JwtAuthenticationRespons
 import br.com.fiap.challengeecommercelogin.services.JwtService;
 import br.com.fiap.challengeecommercelogin.services.UserService;
 import br.com.fiap.challengeecommercelogin.services.interfaces.AuthenticationService;
+import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -29,7 +33,7 @@ public class AuthenticationController {
 
     @Operation(summary = "Cadastrar um novo usuário", description = "Cadastra um novo usuário no sistema.")
     @PostMapping("/signup")
-    public ResponseEntity<JwtAuthenticationResponse> signup(@RequestBody SignUpRequest request) {
+    public ResponseEntity<JwtAuthenticationResponse> signup(@Valid @RequestBody SignUpRequest request) {
         return ResponseEntity.ok(authenticationService.signup(request));
     }
 

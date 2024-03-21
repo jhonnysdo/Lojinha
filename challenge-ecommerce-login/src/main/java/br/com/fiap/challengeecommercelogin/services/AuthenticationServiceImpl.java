@@ -36,7 +36,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .role(request.getRole())
                 .build();
 
         userRepository.save(user);
@@ -50,8 +50,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         User byUsername = userRepository.findByUsername(request.getUsername());
         if (byUsername == null) {
-            log.error("Username not found: " + byUsername.getUsername());
-            throw new UsernameNotFoundException("Usuário não encontrado: " + byUsername.getUsername());
+            log.error("Username not found: " + request.getUsername());
+            throw new UsernameNotFoundException("Usuário não encontrado: " + request.getUsername());
         }
 
         var jwt = jwtService.generateToken(byUsername);
