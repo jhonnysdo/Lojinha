@@ -3,7 +3,6 @@ package br.com.fiap.challengeecommercelogin.services;
 import br.com.fiap.challengeecommercelogin.dao.request.SignUpRequest;
 import br.com.fiap.challengeecommercelogin.dao.request.SigninRequest;
 import br.com.fiap.challengeecommercelogin.dao.response.JwtAuthenticationResponse;
-import br.com.fiap.challengeecommercelogin.entity.CustomUserDetails;
 import br.com.fiap.challengeecommercelogin.entity.User;
 import br.com.fiap.challengeecommercelogin.enums.Role;
 import br.com.fiap.challengeecommercelogin.exceptions.UserAlreadyExistsException;
@@ -37,11 +36,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
+                .role(Role.USER)
                 .build();
 
         userRepository.save(user);
-        var jwt = jwtService.generateToken(new CustomUserDetails(user));
+        var jwt = jwtService.generateToken(user);
         return JwtAuthenticationResponse.builder().token(jwt).build();
     }
 
@@ -51,11 +50,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         User byUsername = userRepository.findByUsername(request.getUsername());
         if (byUsername == null) {
-            log.error("Username not found: " + request.getUsername());
-            throw new UsernameNotFoundException("Usuário não encontrado: " + request.getUsername());
+            log.error("Username not found: " + byUsername.getUsername());
+            throw new UsernameNotFoundException("Usuário não encontrado: " + byUsername.getUsername());
         }
-        CustomUserDetails userDetails = new CustomUserDetails(byUsername);
-        var jwt = jwtService.generateToken(userDetails);
+
+        var jwt = jwtService.generateToken(byUsername);
         return JwtAuthenticationResponse.builder().token(jwt).build();
     }
 }
