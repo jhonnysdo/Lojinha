@@ -1,5 +1,6 @@
 package br.com.fiap.challengeecommercecarrinhodecompras.handler;
 
+import br.com.fiap.challengeecommercecarrinhodecompras.exceptions.CarrinhoNotFoundException;
 import br.com.fiap.challengeecommercecarrinhodecompras.exceptions.ErrorResponse;
 import br.com.fiap.challengeecommercecarrinhodecompras.exceptions.ItemNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,10 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(CarrinhoNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCarrinhoNotFoundException(CarrinhoNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), exception.getMessage()));
+    }
     @ExceptionHandler(ItemNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleItemNotFoundException(ItemNotFoundException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), exception.getMessage()));

@@ -1,26 +1,22 @@
 package br.com.fiap.challengeecommercecarrinhodecompras.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity
+@Builder
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class ItemCarrinho {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotNull(message = "O nome de usuário não pode ser nulo nem branco.")
-    private String username;
 
     @NotNull(message = "O ID do produto não pode ser nulo")
     private Long produtoId;
@@ -28,6 +24,13 @@ public class ItemCarrinho {
     @Min(value = 1, message = "A quantidade deve ser pelo menos 1")
     private int quantidade;
 
+    private String produtoNome;
+
     @NotNull(message = "O preço não pode ser nulo")
-    private Double preco;
+    private Double precoUnitario;
+
+    @JsonProperty
+    public Long getId() {
+        return id;
+    }
 }

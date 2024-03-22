@@ -1,24 +1,21 @@
 package br.com.fiap.challengeecommercecarrinhodecompras.entity;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Carrinho {
 
     @Id
@@ -29,4 +26,6 @@ public class Carrinho {
     private String username;
     private boolean fechado;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<ItemCarrinho> itens;
 }

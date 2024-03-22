@@ -1,7 +1,9 @@
 package br.com.fiap.challengeecommercecarrinhodecompras.controllers;
 
+import br.com.fiap.challengeecommercecarrinhodecompras.dto.CarrinhoDTO;
 import br.com.fiap.challengeecommercecarrinhodecompras.dto.ItemCarrinhoDTO;
 import br.com.fiap.challengeecommercecarrinhodecompras.entity.ItemCarrinho;
+import br.com.fiap.challengeecommercecarrinhodecompras.exceptions.CarrinhoNotFoundException;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.CarrinhoService;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.JwtService;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.ProdutoService;
@@ -21,25 +23,32 @@ public class CarrinhoController {
     private final JwtService jwtService;
 
     @GetMapping
-    public List<ItemCarrinho> listarItensCarrinho(
-            @RequestParam String username
+    public ResponseEntity<CarrinhoDTO> listarItensCarrinho(
+            @RequestHeader(value = "Authorization") String authorizationHeader
     ) {
-        return carrinhoService.listarItensCarrinho(username);
+        isAuthorized(authorizationHeader);
+        return ResponseEntity.ok(carrinhoService.listarItensCarrinho(authorizationHeader));
     }
 
     @PostMapping
-    public ResponseEntity<ItemCarrinhoDTO> adicionarItemCarrinho(
+    public ResponseEntity<CarrinhoDTO> adicionarItemCarrinho(
             @Valid @RequestBody ItemCarrinhoDTO itemCarrinhoDTO,
             @RequestHeader(value = "Authorization") String authorizationHeader
     ) {
-        return ResponseEntity.ok(carrinhoService.adicionarItemCarrinho(
+        isAuthorized(authorizationHeader);
+        return ResponseEntity.ok(
+                carrinhoService.adicionarItemCarrinho(
                 itemCarrinhoDTO,
                 authorizationHeader
         ));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> removerItemCarrinho(@PathVariable Long id) {
+    @DeleteMapping("/itens/{id}")
+    public ResponseEntity<String> removerItemCarrinho(
+            @PathVariable Long id,
+            @RequestHeader(value = "Authorization") String authorizationHeader
+    ) {
+        isAuthorized(authorizationHeader);
         carrinhoService.removerItemCarrinho(id);
         return ResponseEntity.ok("Item removido com sucesso.");
     }
@@ -51,7 +60,7 @@ public class CarrinhoController {
         String token = tokenHeader.substring(7);
 
         String role = jwtService.extractRole(token);
-        if (!role.equals("ADMIN")) {
+        if (!role.equals("ADMIN") && !role.equals("USER")) {
             throw new UnsupportedOperationException("Unauthorized");
         }
     }
