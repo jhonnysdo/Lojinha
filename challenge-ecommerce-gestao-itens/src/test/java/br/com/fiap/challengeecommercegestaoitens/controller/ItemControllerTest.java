@@ -2,8 +2,8 @@ package br.com.fiap.challengeecommercegestaoitens.controller;
 
 import br.com.fiap.challengeecommercegestaoitens.controllers.ItemController;
 import br.com.fiap.challengeecommercegestaoitens.dto.ItemDTO;
-import br.com.fiap.challengeecommercegestaoitens.entity.Item;
 import br.com.fiap.challengeecommercegestaoitens.services.ItemService;
+import br.com.fiap.challengeecommercegestaoitens.services.JwtService;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -28,8 +28,9 @@ public class ItemControllerTest {
         
         // Define the behavior of the mock object
         when(mockItemService.listarTodos()).thenReturn(expectedItems);
-        
-        ItemController itemController = new ItemController(mockItemService);
+
+        JwtService jwtService = null;
+        ItemController itemController = new ItemController(mockItemService, jwtService);
 
         // Call the method under test
         ResponseEntity<List<ItemDTO>> responseEntity = itemController.listarTodos();

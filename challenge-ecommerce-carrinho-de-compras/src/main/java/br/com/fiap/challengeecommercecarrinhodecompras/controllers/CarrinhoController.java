@@ -3,6 +3,7 @@ package br.com.fiap.challengeecommercecarrinhodecompras.controllers;
 import br.com.fiap.challengeecommercecarrinhodecompras.dto.ItemCarrinhoDTO;
 import br.com.fiap.challengeecommercecarrinhodecompras.entity.ItemCarrinho;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.CarrinhoService;
+import br.com.fiap.challengeecommercecarrinhodecompras.services.JwtService;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.ProdutoService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -17,10 +18,12 @@ import java.util.List;
 public class CarrinhoController {
 
     private CarrinhoService carrinhoService;
-    private ProdutoService produtoService;
+    private final JwtService jwtService;
 
     @GetMapping
-    public List<ItemCarrinho> listarItensCarrinho(@RequestParam String username) {
+    public List<ItemCarrinho> listarItensCarrinho(
+            @RequestParam String username
+    ) {
         return carrinhoService.listarItensCarrinho(username);
     }
 
@@ -39,5 +42,17 @@ public class CarrinhoController {
     public ResponseEntity<String> removerItemCarrinho(@PathVariable Long id) {
         carrinhoService.removerItemCarrinho(id);
         return ResponseEntity.ok("Item removido com sucesso.");
+    }
+
+    private void isAuthorized(String tokenHeader) {
+        if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
+            throw new UnsupportedOperationException("Invalid token format.");
+        }
+        String token = tokenHeader.substring(7);
+
+        String role = jwtService.extractRole(token);
+        if (!role.equals("ADMIN")) {
+            throw new UnsupportedOperationException("Unauthorized");
+        }
     }
 }

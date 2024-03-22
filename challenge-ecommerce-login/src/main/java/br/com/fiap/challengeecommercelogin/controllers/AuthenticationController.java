@@ -52,7 +52,8 @@ public class AuthenticationController {
         String token = tokenHeader.substring(7); // Remover "Bearer " do cabeçalho
 
         String username = jwtService.extractUsername(token);
-
+        List<String> roles = jwtService.extractRoles(token);
+        System.out.println(roles.toString());
         try {
             if (StringUtils.isNotEmpty(username)) {
                 UserDetails userDetails = userService.loadUserByUsername(username);

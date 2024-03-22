@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PingController {
     @Operation(summary = "Verificar Status Token", description = "Verifica se o token está ativo.")
-    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/ping")
     public String test() {
         try {
