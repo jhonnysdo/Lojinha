@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -38,7 +39,7 @@ public class CarrinhoService {
     public CarrinhoDTO listarItensCarrinho(String authorizationHeader) {
         String username = jwtService.extractUsername(authorizationHeader.substring(7));
 
-        Carrinho carrinho = carrinhoRepository.findByUsername(username);
+        Carrinho carrinho = carrinhoRepository.findByUsernameAndFechadoIsFalse(username);
         if (carrinho == null) {
             throw new CarrinhoNotFoundException(username);
         }
@@ -57,44 +58,81 @@ public class CarrinhoService {
                 itemCarrinho.getProdutoId(), authorizationHeader);
 
         if (response.getStatusCode().is2xxSuccessful()) {
+
             itemCarrinho.setPrecoUnitario(Objects.requireNonNull(response.getBody()).getPreco());
             itemCarrinho.setProdutoNome(Objects.requireNonNull(response.getBody()).getNome());
-            Carrinho carrinho = carrinhoRepository.findByUsername(
+            Carrinho carrinho = carrinhoRepository.findByUsernameAndFechadoIsFalse(
                     jwtService.extractUsername(authorizationHeader.substring(7)));
 
             if (carrinho == null) {
 
                 carrinho = Carrinho.builder()
                         .username(jwtService.extractUsername(authorizationHeader.substring(7)))
+                        .dataCriacao(LocalDate.now())
                         .itens(new ArrayList<>())
                         .build();
                 carrinho.getItens().add(itemCarrinho);
 
             } else {
+
                 Optional<ItemCarrinho> itemCarrinhoOptional = carrinho.getItens().stream()
                         .filter(item -> item.getProdutoId().equals(itemCarrinho.getProdutoId()))
                         .findFirst();
 
                 if (itemCarrinhoOptional.isPresent()) {
+
                     ItemCarrinho item = itemCarrinhoOptional.get();
                     item.setQuantidade(itemCarrinho.getQuantidade());
                     item.setPrecoUnitario(itemCarrinho.getPrecoUnitario());
                     item.setProdutoNome(itemCarrinho.getProdutoNome());
+
                 } else {
-                    //TODO atualizar o item
-                    carrinho = carrinhoRepository.findByUsername(
-                            jwtService.extractUsername(authorizationHeader.substring(7)));
+
                     carrinho.getItens().add(itemCarrinho);
+
                 }
             }
-            System.out.println(carrinho.toString());
+
+            //atualiza valor total
+            carrinho.setValorTotal(carrinho.getItens().stream()
+                    .mapToDouble(item -> item.getPrecoUnitario() * item.getQuantidade())
+                    .sum());
+
             return modelMapper.map(carrinhoRepository.save(carrinho), CarrinhoDTO.class);
+
         } else {
+
             throw new RuntimeException("Erro ao chamar o serviço de itens.");
         }
     }
 
-    public void removerItemCarrinho(Long id) {
-        carrinhoRepository.deleteById(id);
+    public void removerItemCarrinho(Long id, String authorizationHeader) {
+
+        String username = jwtService.extractUsername(authorizationHeader.substring(7));
+        Carrinho carrinho = carrinhoRepository.findByUsernameAndFechadoIsFalse(username);
+
+        if (carrinho == null) {
+
+            throw new CarrinhoNotFoundException(username);
+
+        }
+
+        Optional<ItemCarrinho> itemCarrinhoOptional = carrinho.getItens().stream()
+                .filter(item -> item.getId().equals(id))
+                .findFirst();
+
+        if (itemCarrinhoOptional.isPresent()) {
+
+            carrinho.getItens().remove(itemCarrinhoOptional.get());
+            carrinho.setValorTotal(carrinho.getItens().stream()
+                    .mapToDouble(item -> item.getPrecoUnitario() * item.getQuantidade())
+                    .sum());
+            carrinhoRepository.save(carrinho);
+
+        } else {
+
+            throw new ItemNotFoundException(id);
+
+        }
     }
 }

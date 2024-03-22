@@ -64,7 +64,6 @@ class CarrinhoControllerTest {
         ItemCarrinho itemCarrinho = new ItemCarrinho();
         itemCarrinho.setProdutoId(1L);
         itemCarrinho.setQuantidade(1);
-        itemCarrinho.setUsername("user");
 
         Mockito.when(jwtService.extractUsername(Mockito.anyString())).thenReturn("user");
         Mockito.when(produtoService.fetchProduto(
@@ -87,15 +86,15 @@ class CarrinhoControllerTest {
     void removerItemCarrinhoTest() throws Exception {
 
         // Mock CarrinhoService method to not perform actions, because we are not testing service layer here
-        doNothing().when(carrinhoService).removerItemCarrinho(anyLong());
+        doNothing().when(carrinhoService).removerItemCarrinho(anyLong(), anyString());
 
         // Perform the HTTP DELETE request and expect 200 OK status and "Item removido com sucesso." message in response
-        this.mockMvc.perform(delete("/carrinho/{id}", 1)
+        this.mockMvc.perform(delete("/carrinho/itens/{id}", 1)
                         .header("Authorization", "Bearer token"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Item removido com sucesso."));
 
         // Verify that removerItemCarrinho method was called exactly once in our mock CarrinhoService service
-        verify(carrinhoService, times(1)).removerItemCarrinho(anyLong());
+        verify(carrinhoService, times(1)).removerItemCarrinho(anyLong(), anyString());
     }
 }

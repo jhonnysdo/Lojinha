@@ -33,7 +33,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private static final String AUTH_HEADER_PREFIX = "Bearer ";
     private final String AUTH_URL = "http://localhost:8080/api/v1/auth/validate";
-    private static final HttpStatus UNAUTHORIZED_STATUS = HttpStatus.FORBIDDEN;
+    private static final HttpStatus UNAUTHORIZED_STATUS = HttpStatus.UNAUTHORIZED;
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Override

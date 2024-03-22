@@ -4,6 +4,7 @@ import br.com.fiap.challengeecommercecarrinhodecompras.dto.CarrinhoDTO;
 import br.com.fiap.challengeecommercecarrinhodecompras.dto.ItemCarrinhoDTO;
 import br.com.fiap.challengeecommercecarrinhodecompras.entity.ItemCarrinho;
 import br.com.fiap.challengeecommercecarrinhodecompras.exceptions.CarrinhoNotFoundException;
+import br.com.fiap.challengeecommercecarrinhodecompras.exceptions.HttpUnauthorizedException;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.CarrinhoService;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.JwtService;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.ProdutoService;
@@ -49,19 +50,19 @@ public class CarrinhoController {
             @RequestHeader(value = "Authorization") String authorizationHeader
     ) {
         isAuthorized(authorizationHeader);
-        carrinhoService.removerItemCarrinho(id);
+        carrinhoService.removerItemCarrinho(id, authorizationHeader);
         return ResponseEntity.ok("Item removido com sucesso.");
     }
 
     private void isAuthorized(String tokenHeader) {
         if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
-            throw new UnsupportedOperationException("Invalid token format.");
+            throw new HttpUnauthorizedException();
         }
         String token = tokenHeader.substring(7);
 
         String role = jwtService.extractRole(token);
         if (!role.equals("ADMIN") && !role.equals("USER")) {
-            throw new UnsupportedOperationException("Unauthorized");
+            throw new HttpUnauthorizedException();
         }
     }
 }

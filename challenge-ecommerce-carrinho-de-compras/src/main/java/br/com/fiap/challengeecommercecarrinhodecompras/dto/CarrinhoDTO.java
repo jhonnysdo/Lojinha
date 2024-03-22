@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -18,6 +19,11 @@ public class CarrinhoDTO {
     private String username;
 
     private boolean fechado;
+
+    private LocalDate dataCriacao;
+
+    private Double valorTotal;
+
     private List<ItemCarrinhoDTO> itens;
 
     @JsonProperty
