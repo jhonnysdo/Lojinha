@@ -16,8 +16,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 // https://www.linkedin.com/pulse/implementing-spring-security-across-microservices-william-haywood/
 public class WebSecurityConfig {
+
     private final JwtAuthFilter jwtAuthFilter;
-    // private final AuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

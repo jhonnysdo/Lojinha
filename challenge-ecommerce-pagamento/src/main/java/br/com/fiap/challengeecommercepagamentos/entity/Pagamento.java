@@ -1,35 +1,40 @@
 package br.com.fiap.challengeecommercepagamentos.entity;
 
-import br.com.fiap.challengeecommercepagamentos.enums.StatusPagamento;
-import br.com.fiap.challengeecommercepagamentos.enums.TipoFormaPagamento;
+import br.com.fiap.challengeecommercepagamentos.enums.FormaPagamento;
+import br.com.fiap.challengeecommercepagamentos.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Entity
-@Table(name ="tb_pagamentos")
+@Builder
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Pagamento {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate dataPagamento;
-    @NotNull(message = "A Forma de Pagamento não pode ser nulo")
-    @Enumerated(EnumType.STRING)
-    private TipoFormaPagamento tipoFormaPagamento;
-    @Enumerated(EnumType.STRING)
-    private StatusPagamento statusPagamento;
 
+    @NotNull
+    private Long carrinhoId;
+
+    @NotNull
+    private Double carrinhoValorTotal;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @NotNull
     private String username;
-    private Long pedidoId;
 
+    private LocalDate dataPagamento;
 
-
+    private FormaPagamento formaPagamento;
 }

@@ -1,8 +1,7 @@
 package br.com.fiap.challengeecommercepagamentos.enums;
 
-public enum StatusPagamento {
+public enum Status {
     CRIADO,
-    CONFIRMADO,
-    CANCELADO
-
+    CANCELADO,
+    PAGO
 }

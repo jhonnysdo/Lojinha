@@ -1,35 +1,68 @@
 package br.com.fiap.challengeecommercepagamentos.services;
 
-import br.com.fiap.challengeecommercepagamentos.dto.request.formasPagamentosDTO.CartaoDTO;
-import br.com.fiap.challengeecommercepagamentos.enums.TipoFormaPagamento;
+import br.com.fiap.challengeecommercepagamentos.dto.CarrinhoDTO;
+import br.com.fiap.challengeecommercepagamentos.dto.PagamentoDTO;
+import br.com.fiap.challengeecommercepagamentos.entity.Pagamento;
+import br.com.fiap.challengeecommercepagamentos.enums.Status;
+import br.com.fiap.challengeecommercepagamentos.exceptions.CarrinhoNotFoundException;
+import br.com.fiap.challengeecommercepagamentos.repository.PagamentoRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
+import java.util.Objects;
 
 @Service
 public class PagamentoService {
+    private final PagamentoRepository pagamentoRepository;
 
-    private FormaPagamentoService formaPagamentoService;
+    private final JwtService jwtService;
 
+    private final CarrinhoService carrinhoService;
 
+    private final ModelMapper modelMapper = new ModelMapper();
 
-    public ResponseEntity<String> iniciarPagamento(String username, double total, TipoFormaPagamento tipoFormaPagamento) {
+    public PagamentoService(PagamentoRepository pagamentoRepository, JwtService jwtService, CarrinhoService carrinhoService) {
+        this.pagamentoRepository = pagamentoRepository;
+        this.jwtService = jwtService;
+        this.carrinhoService = carrinhoService;
+    }
 
+    public PagamentoDTO criarPagamento(String authorizationHeader) {
 
-        switch (tipoFormaPagamento) {
-            case CARTAO_CREDITO:
-            case CARTAO_DEBITO:
-                List<CartaoDTO> cartoes = formaPagamentoService.listarCartoes();
-                if (cartoes.isEmpty()) {
-                    return ResponseEntity.badRequest().body("Nenhum cartão cadastrado para o usuário. ");
+        try {
+
+            ResponseEntity<CarrinhoDTO> response = carrinhoService.fetchCarrinho(
+                    authorizationHeader);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+
+                Pagamento pagamento = pagamentoRepository.findByUsernameAndStatusIsCriado(
+                        jwtService.extractUsername(authorizationHeader.substring(7)));
+
+                if (pagamento == null) {
+
+                    pagamento = Pagamento.builder()
+                            .carrinhoId(Objects.requireNonNull(response.getBody()).getId())
+                            .status(Status.CRIADO)
+                            .carrinhoValorTotal(Objects.requireNonNull(response.getBody()).getValorTotal())
+                            .build();
+                } else {
+
+                    pagamento.setCarrinhoId(Objects.requireNonNull(response.getBody()).getId());
+                    pagamento.setCarrinhoValorTotal(Objects.requireNonNull(response.getBody()).getValorTotal());
+
                 }
-                return ResponseEntity.ok("Pagamento iniciado. ");
-            case PIX:
-            case BOLETO:
-                return ResponseEntity.ok("Pagamento iniciado. ");
+                
 
-            default:
-                return ResponseEntity.badRequest().body("Tipo de pagamento inválido. ");
+                return modelMapper.map(pagamentoRepository.save(pagamento), PagamentoDTO.class);
+
+            } else {
+                throw new CarrinhoNotFoundException(
+                        jwtService.extractUsername(authorizationHeader.substring(7)));
+            }
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
         }
 
     }

@@ -36,7 +36,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         final String jwtToken;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            response.setStatus(403);
+            response.setStatus(401);
             return;
         }
 
@@ -55,7 +55,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
             }
         } catch (HttpClientErrorException e) {
-            response.setStatus(403);
+            response.setStatus(401);
             return;
         }
     }
