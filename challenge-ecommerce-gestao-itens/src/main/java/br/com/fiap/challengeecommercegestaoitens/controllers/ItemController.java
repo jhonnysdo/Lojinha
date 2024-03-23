@@ -1,19 +1,20 @@
 package br.com.fiap.challengeecommercegestaoitens.controllers;
 
 import br.com.fiap.challengeecommercegestaoitens.dto.ItemDTO;
+import br.com.fiap.challengeecommercegestaoitens.exceptions.UnauthorizedErrorException;
 import br.com.fiap.challengeecommercegestaoitens.services.ItemService;
 import br.com.fiap.challengeecommercegestaoitens.services.JwtService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/itens")
+@RequestMapping
 @AllArgsConstructor
-
 public class ItemController {
 
     private final ItemService itemService;
@@ -47,15 +48,27 @@ public class ItemController {
         return ResponseEntity.ok(itemService.buscarPorId(id));
     }
 
-    @PutMapping("/{id}/quantidade/{quantidade}")
+    @PutMapping("/adicinarItemCarrinho/{id}/quantidade/{quantidade}")
     public ResponseEntity<ItemDTO> reservarEstoque(
             @PathVariable Long id,
             @PathVariable Integer quantidade,
             @RequestHeader("Authorization") String tokenHeader
     ) {
         isAuthorized(tokenHeader);
-        return ResponseEntity.ok(itemService.reservarEstoque(id, quantidade));
+        itemService.reservarEstoque(id, quantidade);
+        return ResponseEntity.ok().build();
     }
+    @PutMapping("/removerItemCarrinho/{id}/quantidade/{quantidade}")
+    public ResponseEntity<ItemDTO> desreservarEstoque(
+            @PathVariable Long id,
+            @PathVariable Integer quantidade,
+            @RequestHeader("Authorization") String tokenHeader
+    ) {
+        isAuthorized(tokenHeader);
+        itemService.desreservarEstoque(id, quantidade);
+        return ResponseEntity.ok().build();
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarItem(
@@ -80,25 +93,26 @@ public class ItemController {
 
     private void isAdminAuthorized(String tokenHeader) {
         if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
-            throw new UnsupportedOperationException("Invalid token format.");
+            throw new UnauthorizedErrorException();
         }
         String token = tokenHeader.substring(7);
 
         String role = jwtService.extractRole(token);
         if (!role.equals("ADMIN")) {
-            throw new UnsupportedOperationException("Unauthorized");
+            throw new UnauthorizedErrorException();
         }
     }
 
     private void isAuthorized(String tokenHeader) {
         if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
-            throw new UnsupportedOperationException("Invalid token format.");
+            throw new UnauthorizedErrorException();
         }
+
         String token = tokenHeader.substring(7);
 
         String role = jwtService.extractRole(token);
         if (!role.equals("ADMIN") && !role.equals("USER")) {
-            throw new UnsupportedOperationException("Unauthorized");
+            throw new UnauthorizedErrorException();
         }
     }
 }

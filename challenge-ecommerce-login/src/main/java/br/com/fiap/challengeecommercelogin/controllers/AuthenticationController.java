@@ -45,7 +45,9 @@ public class AuthenticationController {
 
     @Operation(summary = "Validar token", description = "Valida um token de autenticação.")
     @GetMapping("/validate")
-    public ResponseEntity<String> validate(@RequestHeader("Authorization") String tokenHeader) {
+    public ResponseEntity<String> validate(
+            @RequestHeader("Authorization") String tokenHeader
+    ) {
         if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
             return ResponseEntity.badRequest().body("Invalid token format.");
         }
@@ -53,7 +55,7 @@ public class AuthenticationController {
 
         String username = jwtService.extractUsername(token);
         List<String> roles = jwtService.extractRoles(token);
-        System.out.println(roles.toString());
+
         try {
             if (StringUtils.isNotEmpty(username)) {
                 UserDetails userDetails = userService.loadUserByUsername(username);

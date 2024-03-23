@@ -62,7 +62,7 @@ public class ItemService {
     }
 
     @Transactional
-    public ItemDTO reservarEstoque(Long id, Integer quantidade) {
+    public void reservarEstoque(Long id, Integer quantidade) {
         Item item = itemRepository.findById(id).orElseThrow(() -> new ItemNotFoundException(id));
 
         if (item.getQuantidade() < quantidade) {
@@ -70,6 +70,13 @@ public class ItemService {
         }
 
         item.setQuantidade(item.getQuantidade() - quantidade);
-        return modelMapper.map(itemRepository.save(item), ItemDTO.class);
+        itemRepository.save(item);
+    }
+
+    @Transactional
+    public void desreservarEstoque(Long id, Integer quantidade) {
+        Item item = itemRepository.findById(id).orElseThrow(() -> new ItemNotFoundException(id));
+        item.setQuantidade(item.getQuantidade() + quantidade);
+        itemRepository.save(item);
     }
 }

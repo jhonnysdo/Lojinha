@@ -1,9 +1,6 @@
 package br.com.fiap.challengeecommercecarrinhodecompras.handler;
 
-import br.com.fiap.challengeecommercecarrinhodecompras.exceptions.CarrinhoNotFoundException;
-import br.com.fiap.challengeecommercecarrinhodecompras.exceptions.ErrorResponse;
-import br.com.fiap.challengeecommercecarrinhodecompras.exceptions.HttpUnauthorizedException;
-import br.com.fiap.challengeecommercecarrinhodecompras.exceptions.ItemNotFoundException;
+import br.com.fiap.challengeecommercecarrinhodecompras.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -17,6 +14,11 @@ import org.springframework.web.context.request.WebRequest;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ItemOutOfStockException.class)
+    public ResponseEntity<ErrorResponse> handleItemOutOfStockExceptionn(ItemOutOfStockException exception) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new ErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY.value(), exception.getMessage()));
+    }
 
     @ExceptionHandler(HttpUnauthorizedException.class)
     public ResponseEntity<ErrorResponse> handleHttpUnauthorizedException(HttpUnauthorizedException exception) {

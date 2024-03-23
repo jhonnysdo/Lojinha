@@ -23,23 +23,39 @@ public class CarrinhoService {
     }
 
     public ResponseEntity<CarrinhoDTO> fetchCarrinho(String authorizationHeader) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", authorizationHeader);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
+        String url = "http://localhost:8082/carrinho-de-compras/carrinho/pendentePagamento";
 
+        return callService(url, HttpMethod.GET, authorizationHeader);
+    }
+
+    public ResponseEntity<CarrinhoDTO> atualizarStautsPago(String authorizationHeader) {
+        String url = "http://localhost:8082/carrinho-de-compras/carrinho/atualizarStatusPago";
+
+        return callService(url, HttpMethod.PUT, authorizationHeader);
+    }
+
+    public ResponseEntity<CarrinhoDTO> atualizarStautsCancelado(String authorizationHeader) {
+        String url = "http://localhost:8082/carrinho-de-compras/carrinho/cancelarCompra";
+
+        return callService(url, HttpMethod.PUT, authorizationHeader);
+    }
+
+    private ResponseEntity<CarrinhoDTO> callService(String url, HttpMethod httpMethod, String authorizationHeader) {
         try {
-            return restTemplate.exchange("http://localhost:8091/carrinho",
-                    HttpMethod.GET,
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", authorizationHeader);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            return restTemplate.exchange(url,
+                    httpMethod,
                     entity,
                     CarrinhoDTO.class);
 
         } catch (HttpClientErrorException ex) {
             if (ex.getStatusCode() == HttpStatus.NOT_FOUND) {
-                throw new CarrinhoNotFoundException(
-                        jwtService.extractUsername(authorizationHeader.substring(7))
-                );
+                throw new CarrinhoNotFoundException(jwtService.extractUsername(authorizationHeader.substring(7)));
             } else {
-                throw new RuntimeException("Erro ao chamar o serviço carrinho.", ex);
+                throw new RuntimeException("Erro ao chamar o serviço de itens.", ex);
             }
         }
     }

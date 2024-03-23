@@ -1,5 +1,6 @@
 package br.com.fiap.challengeecommercepagamentos.dto;
 
+import br.com.fiap.challengeecommercepagamentos.enums.CarrinhoStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
@@ -13,14 +14,14 @@ import java.util.List;
 @Setter
 public class CarrinhoDTO {
 
-    @JsonIgnore
+    @NotNull
     private Long id;
 
     @JsonIgnore
     private String username;
 
     @NotNull
-    private boolean fechado;
+    private CarrinhoStatus status;
 
     @NotNull
     private LocalDate dataCriacao;
@@ -30,9 +31,4 @@ public class CarrinhoDTO {
 
     @NotNull
     private List<ItemCarrinhoDTO> itens;
-
-    @JsonProperty
-    public Long getId() {
-        return id;
-    }
 }

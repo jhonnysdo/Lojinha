@@ -2,14 +2,12 @@ package br.com.fiap.challengeecommercecarrinhodecompras.controllers;
 
 import br.com.fiap.challengeecommercecarrinhodecompras.dto.CarrinhoDTO;
 import br.com.fiap.challengeecommercecarrinhodecompras.dto.ItemCarrinhoDTO;
-import br.com.fiap.challengeecommercecarrinhodecompras.entity.ItemCarrinho;
-import br.com.fiap.challengeecommercecarrinhodecompras.exceptions.CarrinhoNotFoundException;
 import br.com.fiap.challengeecommercecarrinhodecompras.exceptions.HttpUnauthorizedException;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.CarrinhoService;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.JwtService;
-import br.com.fiap.challengeecommercecarrinhodecompras.services.ProdutoService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,12 +21,27 @@ public class CarrinhoController {
     private CarrinhoService carrinhoService;
     private final JwtService jwtService;
 
+    @GetMapping("/todos")
+    public ResponseEntity<List<CarrinhoDTO>> listarTodosCarrinhos(
+            @RequestHeader(value = "Authorization") String authorizationHeader
+    ) {
+        isAdminAuthorized(authorizationHeader);
+        return ResponseEntity.ok(carrinhoService.listarCarrinhos());
+    }
     @GetMapping
-    public ResponseEntity<CarrinhoDTO> listarItensCarrinho(
+    public ResponseEntity<CarrinhoDTO> listarCarrinhoUsuario(
             @RequestHeader(value = "Authorization") String authorizationHeader
     ) {
         isAuthorized(authorizationHeader);
-        return ResponseEntity.ok(carrinhoService.listarItensCarrinho(authorizationHeader));
+        return ResponseEntity.ok(carrinhoService.listarCarrinhoUsuario(authorizationHeader));
+    }
+
+    @GetMapping("/pendentePagamento")
+    public ResponseEntity<CarrinhoDTO> listarCarrinhoPendentePagamento(
+            @RequestHeader(value = "Authorization") String authorizationHeader
+    ) {
+        isAuthorized(authorizationHeader);
+        return ResponseEntity.ok(carrinhoService.listarCarrinhoUsuarioPendentePagamento(authorizationHeader));
     }
 
     @PostMapping
@@ -44,13 +57,13 @@ public class CarrinhoController {
         ));
     }
 
-    @DeleteMapping("/itens/{id}")
-    public ResponseEntity<String> removerItemCarrinho(
+    @DeleteMapping("/produto/{id}")
+    public ResponseEntity<String> removerProdutoCarrinho(
             @PathVariable Long id,
             @RequestHeader(value = "Authorization") String authorizationHeader
     ) {
         isAuthorized(authorizationHeader);
-        carrinhoService.removerItemCarrinho(id, authorizationHeader);
+        carrinhoService.removerProdutoCarrinho(id, authorizationHeader);
         return ResponseEntity.ok("Item removido com sucesso.");
     }
 
@@ -63,13 +76,20 @@ public class CarrinhoController {
         return ResponseEntity.ok("Carrinho finalizado com sucesso, aguardando a confirmação do pagamento.");
     }
 
-    @PutMapping("/cancelarCompra")
-    public ResponseEntity<String> cancelarCompra(
+    @PutMapping("/atualizarStatusPago")
+    public ResponseEntity<CarrinhoDTO> atualizarStatusPago(
             @RequestHeader(value = "Authorization") String authorizationHeader
     ) {
         isAuthorized(authorizationHeader);
-        carrinhoService.cancelarCompra(authorizationHeader);
-        return ResponseEntity.ok("Carrinho esvaziado com sucesso.");
+        return ResponseEntity.ok(carrinhoService.atualizarStatusPago(authorizationHeader));
+    }
+
+    @PutMapping("/cancelarCompra")
+    public ResponseEntity<CarrinhoDTO> cancelarCompra(
+            @RequestHeader(value = "Authorization") String authorizationHeader
+    ) {
+        isAuthorized(authorizationHeader);
+        return ResponseEntity.ok(carrinhoService.cancelarCompra(authorizationHeader));
     }
 
     private void isAuthorized(String tokenHeader) {
@@ -80,6 +100,18 @@ public class CarrinhoController {
 
         String role = jwtService.extractRole(token);
         if (!role.equals("ADMIN") && !role.equals("USER")) {
+            throw new HttpUnauthorizedException();
+        }
+    }
+
+    private void isAdminAuthorized(String tokenHeader) {
+        if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
+            throw new HttpUnauthorizedException();
+        }
+        String token = tokenHeader.substring(7);
+
+        String role = jwtService.extractRole(token);
+        if (!role.equals("ADMIN")) {
             throw new HttpUnauthorizedException();
         }
     }

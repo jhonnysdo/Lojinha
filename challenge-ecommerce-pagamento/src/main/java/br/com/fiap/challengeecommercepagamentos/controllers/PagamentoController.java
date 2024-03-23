@@ -12,9 +12,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
-@RequestMapping("/pagamento")
+@RequestMapping
 @AllArgsConstructor
 public class PagamentoController {
 
@@ -22,22 +24,31 @@ public class PagamentoController {
 
     private PagamentoService pagamentoService;
 
-    @PostMapping
-    public ResponseEntity<PagamentoDTO> criarPagamento(
+    @GetMapping("/todos")
+    public ResponseEntity<List<PagamentoDTO>> listarTodos(
             @RequestHeader(value = "Authorization") String authorizationHeader
     ) {
-        isAuthorized(authorizationHeader);
-        return ResponseEntity.ok(pagamentoService.criarPagamento(authorizationHeader));
+        isAdminAuthorized(authorizationHeader);
+        return ResponseEntity.ok(pagamentoService.listarTodos(authorizationHeader));
     }
 
-    @PostMapping("/pagar")
+    @PutMapping("/pagar/{formaPagamento}")
     public ResponseEntity<String> realizarPagamento(
-            @Valid @RequestBody FormaPagamento formaPagamento,
+            @PathVariable FormaPagamento formaPagamento,
             @RequestHeader(value = "Authorization") String authorizationHeader
     ) {
         isAuthorized(authorizationHeader);
         pagamentoService.realizarPagamento(formaPagamento, authorizationHeader);
         return ResponseEntity.ok("Pagamento realizado com sucesso");
+    }
+
+    @PutMapping("/cancelar")
+    public ResponseEntity<String> cancelarPagamento(
+            @RequestHeader(value = "Authorization") String authorizationHeader
+    ) {
+        isAuthorized(authorizationHeader);
+        pagamentoService.cancelarPagamento(authorizationHeader);
+        return ResponseEntity.ok("Pagamento cancelado com sucesso");
     }
 
     @GetMapping
@@ -53,6 +64,18 @@ public class PagamentoController {
 
         String role = jwtService.extractRole(token);
         if (!role.equals("ADMIN") && !role.equals("USER")) {
+            throw new HttpUnauthorizedException();
+        }
+    }
+
+    private void isAdminAuthorized(String tokenHeader) {
+        if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
+            throw new HttpUnauthorizedException();
+        }
+        String token = tokenHeader.substring(7);
+
+        String role = jwtService.extractRole(token);
+        if (!role.equals("ADMIN")) {
             throw new HttpUnauthorizedException();
         }
     }

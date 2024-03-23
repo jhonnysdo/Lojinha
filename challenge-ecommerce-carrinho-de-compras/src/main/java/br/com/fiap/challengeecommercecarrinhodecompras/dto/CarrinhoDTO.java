@@ -13,7 +13,6 @@ import java.util.List;
 @Setter
 public class CarrinhoDTO {
 
-    @JsonIgnore
     private Long id;
 
     @JsonIgnore

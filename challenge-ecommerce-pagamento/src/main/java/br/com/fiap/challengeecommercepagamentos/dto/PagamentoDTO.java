@@ -1,6 +1,7 @@
 package br.com.fiap.challengeecommercepagamentos.dto;
 
 import br.com.fiap.challengeecommercepagamentos.enums.FormaPagamento;
+import br.com.fiap.challengeecommercepagamentos.enums.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
@@ -25,6 +26,9 @@ public class PagamentoDTO {
 
     @NotNull
     private Long carrinhoId;
+
+    @NotNull
+    private Status status;
 
     @NotNull
     private Double carrinhoValorTotal;

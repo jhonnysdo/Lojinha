@@ -8,11 +8,14 @@ import br.com.fiap.challengeecommercepagamentos.enums.Status;
 import br.com.fiap.challengeecommercepagamentos.exceptions.CarrinhoNotFoundException;
 import br.com.fiap.challengeecommercepagamentos.exceptions.PagamentoNotFoundException;
 import br.com.fiap.challengeecommercepagamentos.repository.PagamentoRepository;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.util.matcher.IpAddressMatcher;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -31,57 +34,64 @@ public class PagamentoService {
         this.carrinhoService = carrinhoService;
     }
 
-    public PagamentoDTO criarPagamento(String authorizationHeader) {
-
-        try {
-
-            ResponseEntity<CarrinhoDTO> response = carrinhoService.fetchCarrinho(
-                    authorizationHeader);
-
-            if (response.getStatusCode().is2xxSuccessful()) {
-
-                Pagamento pagamento = pagamentoRepository.findByUsernameAndStatusIsCriado(
-                        jwtService.extractUsername(authorizationHeader.substring(7)));
-
-                if (pagamento == null) {
-
-                    pagamento = Pagamento.builder()
-                            .carrinhoId(Objects.requireNonNull(response.getBody()).getId())
-                            .status(Status.CRIADO)
-                            .carrinhoValorTotal(Objects.requireNonNull(response.getBody()).getValorTotal())
-                            .build();
-                } else {
-
-                    pagamento.setCarrinhoId(Objects.requireNonNull(response.getBody()).getId());
-                    pagamento.setCarrinhoValorTotal(Objects.requireNonNull(response.getBody()).getValorTotal());
-
-                }
-
-                return modelMapper.map(pagamentoRepository.save(pagamento), PagamentoDTO.class);
-
-            } else {
-                throw new CarrinhoNotFoundException(
-                        jwtService.extractUsername(authorizationHeader.substring(7)));
-            }
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
+    public List<PagamentoDTO> listarTodos(String authorizationHeader) {
+        return pagamentoRepository.findAll().stream()
+                .map(pagamento -> modelMapper.map(pagamento, PagamentoDTO.class))
+                .toList();
     }
-
+    @Transactional
     public void realizarPagamento(FormaPagamento formaPagamento, String authorizationHeader) {
 
         Pagamento pagamento = pagamentoRepository.findByUsernameAndStatusIsCriado(
                 jwtService.extractUsername(authorizationHeader.substring(7)));
 
-        if (pagamento == null) {
-            throw new PagamentoNotFoundException(
+        ResponseEntity<CarrinhoDTO> carrinhoDTO = carrinhoService.fetchCarrinho(authorizationHeader);
+
+        if (!carrinhoDTO.getStatusCode().is2xxSuccessful()) {
+            throw new CarrinhoNotFoundException(
                     jwtService.extractUsername(authorizationHeader.substring(7)));
+        }
+
+        if (pagamento == null) {
+            pagamento = Pagamento.builder()
+                    .carrinhoId(carrinhoDTO.getBody().getId())
+                    .status(Status.CRIADO)
+                    .carrinhoValorTotal(Objects.requireNonNull(carrinhoDTO.getBody()).getValorTotal())
+                    .build();
+        } else {
+            pagamento.setCarrinhoValorTotal(Objects.requireNonNull(carrinhoDTO.getBody()).getValorTotal());
         }
 
         pagamento.setStatus(Status.PAGO);
         pagamento.setFormaPagamento(formaPagamento);
         pagamento.setDataPagamento(LocalDateTime.now());
 
-        return modelMapper.map(pagamentoRepository.save(pagamento), PagamentoDTO.class);
+        ResponseEntity<CarrinhoDTO> atualizarStautsPago = carrinhoService.atualizarStautsPago(authorizationHeader);
+
+        if (atualizarStautsPago.getStatusCode().is2xxSuccessful()) {
+            pagamentoRepository.save(pagamento);
+        } else {
+            throw new CarrinhoNotFoundException(
+                    jwtService.extractUsername(authorizationHeader.substring(7)));
+        }
+    }
+
+    @Transactional
+    public void cancelarPagamento(String authorizationHeader) {
+
+        ResponseEntity<CarrinhoDTO> response = carrinhoService.atualizarStautsCancelado(authorizationHeader);
+
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new CarrinhoNotFoundException(
+                    jwtService.extractUsername(authorizationHeader.substring(7)));
+        }
+
+        Pagamento pagamento = Pagamento.builder()
+                .carrinhoId(response.getBody().getId())
+                .status(Status.CANCELADO)
+                .carrinhoValorTotal(response.getBody().getValorTotal())
+                .build();
+
+        pagamentoRepository.save(pagamento);
     }
 }

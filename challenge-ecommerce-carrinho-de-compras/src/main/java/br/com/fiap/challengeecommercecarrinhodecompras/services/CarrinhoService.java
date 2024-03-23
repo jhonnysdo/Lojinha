@@ -8,6 +8,7 @@ import br.com.fiap.challengeecommercecarrinhodecompras.entity.Carrinho;
 import br.com.fiap.challengeecommercecarrinhodecompras.entity.ItemCarrinho;
 import br.com.fiap.challengeecommercecarrinhodecompras.exceptions.CarrinhoNotFoundException;
 import br.com.fiap.challengeecommercecarrinhodecompras.exceptions.ItemNotFoundException;
+import br.com.fiap.challengeecommercecarrinhodecompras.exceptions.ItemOutOfStockException;
 import br.com.fiap.challengeecommercecarrinhodecompras.repository.CarrinhoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,10 @@ import org.modelmapper.ModelMapper;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CarrinhoService {
@@ -36,10 +39,26 @@ public class CarrinhoService {
         this.produtoService = produtoService;
     }
 
-    public CarrinhoDTO listarItensCarrinho(String authorizationHeader) {
+    public List<CarrinhoDTO> listarCarrinhos() {
+        return carrinhoRepository.findAll().stream()
+                .map(carrinho -> modelMapper.map(carrinho, CarrinhoDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public CarrinhoDTO listarCarrinhoUsuario(String authorizationHeader) {
         String username = jwtService.extractUsername(authorizationHeader.substring(7));
 
         Carrinho carrinho = carrinhoRepository.findByUsernameAndStatusIsCriado(username);
+        if (carrinho == null) {
+            throw new CarrinhoNotFoundException(username);
+        }
+        return modelMapper.map(carrinho, CarrinhoDTO.class);
+    }
+
+    public CarrinhoDTO listarCarrinhoUsuarioPendentePagamento(String authorizationHeader) {
+        String username = jwtService.extractUsername(authorizationHeader.substring(7));
+
+        Carrinho carrinho = carrinhoRepository.findByUsernameAndStatusIsPendentePagamento(username);
         if (carrinho == null) {
             throw new CarrinhoNotFoundException(username);
         }
@@ -74,6 +93,13 @@ public class CarrinhoService {
                         .build();
                 carrinho.getItens().add(itemCarrinho);
 
+                ResponseEntity<ProdutoDTO> adicinarItemCarrinho = produtoService.adicinarItemCarrinho(
+                        itemCarrinho.getProdutoId(), itemCarrinho.getQuantidade(), authorizationHeader);
+
+                if (!adicinarItemCarrinho.getStatusCode().is2xxSuccessful()) {
+                    throw new ItemOutOfStockException(itemCarrinho.getProdutoId(), itemCarrinho.getQuantidade());
+                }
+
             } else {
 
                 Optional<ItemCarrinho> itemCarrinhoOptional = carrinho.getItens().stream()
@@ -82,6 +108,25 @@ public class CarrinhoService {
 
                 if (itemCarrinhoOptional.isPresent()) {
 
+
+                    if (itemCarrinhoOptional.get().getQuantidade() < itemCarrinhoDTO.getQuantidade()) {
+
+                        ResponseEntity<ProdutoDTO> atualizaItemCarrinho = produtoService.adicinarItemCarrinho(
+                                itemCarrinho.getProdutoId(),
+                                itemCarrinhoDTO.getQuantidade() - itemCarrinhoOptional.get().getQuantidade()
+                                , authorizationHeader);
+
+                        if (!atualizaItemCarrinho.getStatusCode().is2xxSuccessful()) {
+                            throw new ItemOutOfStockException(itemCarrinho.getProdutoId(), itemCarrinho.getQuantidade());
+                        }
+
+                    } else if (itemCarrinhoOptional.get().getQuantidade() > itemCarrinhoDTO.getQuantidade()) {
+                        produtoService.removeItemCarrinho(
+                                itemCarrinho.getProdutoId(),
+                                itemCarrinhoOptional.get().getQuantidade() - itemCarrinhoDTO.getQuantidade()
+                                , authorizationHeader);
+                    }
+
                     ItemCarrinho item = itemCarrinhoOptional.get();
                     item.setQuantidade(itemCarrinho.getQuantidade());
                     item.setPrecoUnitario(itemCarrinho.getPrecoUnitario());
@@ -89,8 +134,16 @@ public class CarrinhoService {
 
                 } else {
 
-                    carrinho.getItens().add(itemCarrinho);
+                    ResponseEntity<ProdutoDTO> atualizaItemCarrinho = produtoService.adicinarItemCarrinho(
+                            itemCarrinho.getProdutoId(),
+                            itemCarrinhoDTO.getQuantidade()
+                            , authorizationHeader);
 
+                    if (!atualizaItemCarrinho.getStatusCode().is2xxSuccessful()) {
+                        throw new ItemOutOfStockException(itemCarrinho.getProdutoId(), itemCarrinho.getQuantidade());
+                    }
+
+                    carrinho.getItens().add(itemCarrinho);
                 }
             }
 
@@ -108,15 +161,13 @@ public class CarrinhoService {
     }
 
     @Transactional
-    public void removerItemCarrinho(Long id, String authorizationHeader) {
+    public void removerProdutoCarrinho(Long id, String authorizationHeader) {
 
         String username = jwtService.extractUsername(authorizationHeader.substring(7));
         Carrinho carrinho = carrinhoRepository.findByUsernameAndStatusIsCriado(username);
 
         if (carrinho == null) {
-
             throw new CarrinhoNotFoundException(username);
-
         }
 
         Optional<ItemCarrinho> itemCarrinhoOptional = carrinho.getItens().stream()
@@ -124,6 +175,15 @@ public class CarrinhoService {
                 .findFirst();
 
         if (itemCarrinhoOptional.isPresent()) {
+
+            ResponseEntity<ProdutoDTO> response = produtoService.removeItemCarrinho(
+                    itemCarrinhoOptional.get().getProdutoId(),
+                    itemCarrinhoOptional.get().getQuantidade(),
+                    authorizationHeader);
+
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new ItemNotFoundException(itemCarrinhoOptional.get().getProdutoId());
+            }
 
             carrinho.getItens().remove(itemCarrinhoOptional.get());
             carrinho.setValorTotal(carrinho.getItens().stream()
@@ -153,16 +213,42 @@ public class CarrinhoService {
     }
 
     @Transactional
-    public void cancelarCompra(String authorizationHeader) {
+    public CarrinhoDTO atualizarStatusPago(String authorizationHeader) {
 
         String username = jwtService.extractUsername(authorizationHeader.substring(7));
-        Carrinho carrinho = carrinhoRepository.findByUsernameAndStatusIsCriado(username);
+        Carrinho carrinho = carrinhoRepository.findByUsernameAndStatusIsPendentePagamento(username);
 
         if (carrinho == null) {
             throw new CarrinhoNotFoundException(username);
         }
 
+        carrinho.setStatus(Status.PAGO);
+        return modelMapper.map(carrinhoRepository.save(carrinho), CarrinhoDTO.class);
+    }
+
+
+    @Transactional
+    public CarrinhoDTO cancelarCompra(String authorizationHeader) {
+
+        String username = jwtService.extractUsername(authorizationHeader.substring(7));
+        Carrinho carrinho = carrinhoRepository.findByUsernameAndStatusIsPendentePagamento(username);
+
+        if (carrinho == null) {
+            throw new CarrinhoNotFoundException(username);
+        }
+
+        carrinho.getItens().forEach(itemCarrinho -> {
+            ResponseEntity<ProdutoDTO> response = produtoService.removeItemCarrinho(
+                    itemCarrinho.getProdutoId(),
+                    itemCarrinho.getQuantidade(),
+                    authorizationHeader);
+
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new ItemNotFoundException(itemCarrinho.getProdutoId());
+            }
+        });
+
         carrinho.setStatus(Status.CANCELADO);
-        carrinhoRepository.save(carrinho);
+        return modelMapper.map(carrinhoRepository.save(carrinho), CarrinhoDTO.class);
     }
 }
