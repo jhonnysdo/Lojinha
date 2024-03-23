@@ -1,10 +1,9 @@
 {
 	"info": {
-		"_postman_id": "9f7aafd4-e270-41ce-bfe6-40966a1b7a3b",
+		"_postman_id": "8ab050ef-a422-4569-a1c3-ddf04ac841fb",
 		"name": "Tech challenge 5 - Ecommerce",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "2416879",
-		"_collection_link": "https://warped-meteor-302132.postman.co/workspace/FIAP---Hackaton~94971455-a2b0-4e84-a2de-73775d91e8c4/collection/2416879-9f7aafd4-e270-41ce-bfe6-40966a1b7a3b?action=share&source=collection_link&creator=2416879"
+		"_exporter_id": "30130717"
 	},
 	"item": [
 		{
@@ -26,12 +25,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/gestao-itens/ping",
+							"raw": "http://localhost:8091/gestao-itens/ping",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8091",
 							"path": [
 								"gestao-itens",
 								"ping"
@@ -56,15 +55,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/gestao-itens/itens",
+							"raw": "http://localhost:8091/gestao-itens",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8091",
 							"path": [
-								"gestao-itens",
-								"itens"
+								"gestao-itens"
 							]
 						}
 					},
@@ -86,16 +84,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/gestao-itens/itens/200",
+							"raw": "http://localhost:8091/gestao-itens/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8091",
 							"path": [
 								"gestao-itens",
-								"itens",
-								"200"
+								"1"
 							]
 						}
 					},
@@ -118,7 +115,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nome\": \"Playstation 5\",\n    \"preco\": 4500\n}",
+							"raw": "{\n    \"nome\": \"Playstation 5 Slim\",\n    \"preco\": 5500,\n    \"quantidade\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -126,15 +123,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/gestao-itens/itens",
+							"raw": "http://localhost:8091/gestao-itens/",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8091",
 							"path": [
 								"gestao-itens",
-								"itens"
+								""
 							]
 						}
 					},
@@ -157,7 +154,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nome\": \"Playstation 5 - Slim\",\n    \"preco\": 4000\n}",
+							"raw": "{\n    \"nome\": \"Playstation 5 - Slim\",\n    \"preco\": 4000,\n    \"quantidade\": 200\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -165,15 +162,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/gestao-itens/itens/1",
+							"raw": "http://localhost:8091/gestao-itens/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8091",
 							"path": [
 								"gestao-itens",
-								"itens",
 								"1"
 							]
 						}
@@ -216,7 +212,7 @@
 					"response": []
 				},
 				{
-					"name": "Lista todos os itens do carrinho",
+					"name": "API Lista Carrinho",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -231,7 +227,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8082/carrinho-de-compras/carrinho?username=usuario",
+							"raw": "http://localhost:8082/carrinho-de-compras/carrinho",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -244,7 +240,46 @@
 							"query": [
 								{
 									"key": "username",
-									"value": "usuario"
+									"value": "usuario",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "API ADMIN Lista todos os Carrinhos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/carrinho-de-compras/carrinho/todos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"carrinho-de-compras",
+								"carrinho",
+								"todos"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "usuario",
+									"disabled": true
 								}
 							]
 						}
@@ -268,7 +303,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"produtoId\": 1,\n    \"quantidade\": 5\n}",
+							"raw": "{\n    \"produtoId\": 2,\n    \"quantidade\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -285,6 +320,46 @@
 							"path": [
 								"carrinho-de-compras",
 								"carrinho"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "API Fechar Carrinho",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"produtoId\": 1,\n    \"quantidade\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/carrinho-de-compras/carrinho/finalizarCompra",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"carrinho-de-compras",
+								"carrinho",
+								"finalizarCompra"
 							]
 						}
 					},
@@ -315,7 +390,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8082/carrinho-de-compras/carrinho/1",
+							"raw": "http://localhost:8082/carrinho-de-compras/carrinho/produto/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -324,7 +399,8 @@
 							"path": [
 								"carrinho-de-compras",
 								"carrinho",
-								"1"
+								"produto",
+								"2"
 							]
 						}
 					},
@@ -366,7 +442,68 @@
 					"response": []
 				},
 				{
-					"name": "Listar Cartoes",
+					"name": "API pagar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/pagamentos/pagar/PIX",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"pagamentos",
+								"pagar",
+								"PIX"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "API Cancelar Pagamento",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/pagamentos/cancelar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"pagamentos",
+								"cancelar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "API Listar Todos Pagamentos",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -381,7 +518,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8083/pagamentos/formas-pagamento",
+							"raw": "http://localhost:8083/pagamentos/todos",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -389,58 +526,8 @@
 							"port": "8083",
 							"path": [
 								"pagamentos",
-								"formas-pagamento"
+								"todos"
 							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Cadastrar Cartao",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"numeroCartao\":\"1123423324\",\r\n    \"nomeResponsavel\":\"Kaique Silva Ribeiro\",\r\n    \"dataVencimento\":\"04/29\",\r\n    \"codigoSeguranca\":\"906\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8083/pagamentos/formas-pagamento",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8083",
-							"path": [
-								"pagamentos",
-								"formas-pagamento"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Remover Cartao",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": ""
 						}
 					},
 					"response": []
@@ -457,7 +544,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"otavio\",\n    \"password\": \"otavio\",\n    \"role\": \"ADMIN\"\n}",
+							"raw": "{\n    \"username\": \"otavioaxx\",\n    \"password\": \"otavioax\",\n    \"role\": \"ADMIN\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -488,7 +575,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"otavio\",\n    \"password\": \"otavio\"\n}",
+							"raw": "{\n    \"username\": \"otavioaxx\",\n    \"password\": \"otavioax\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -540,6 +627,45 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "API Validar usuário",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9XSwic3ViIjoib3RhdmlvIiwiaWF0IjoxNzExMjIyMTcwLCJleHAiOjE3MTEyMjM2MTB9.JEo8kVF8g1RNBC-qahSk9ZrfVWCoAeBYELN3g-kX93E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6W3siYXV0aG9yaXR5IjoiVVNFUiJ9XSwic3ViIjoib3RhdmlvIiwiaWF0IjoxNzExMjIyMTcwLCJleHAiOjE3MTEyMjM2MTB9.JEo8kVF8g1RNBC-qahSk9ZrfVWCoAeBYELN3g-kX93E",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/validate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"validate"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
@@ -550,37 +676,6 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
-					"pm.sendRequest({",
-					"    url: 'http://localhost:8080/api/v1/auth/signin',",
-					"    method: 'POST',",
-					"    header: {",
-					"        'Content-Type': 'application/json'",
-					"    },",
-					"    body: {",
-					"        mode: 'raw',",
-					"        raw: JSON.stringify({",
-					"            \"username\": \"otavio\",",
-					"            \"password\": \"otavio\"",
-					"        })",
-					"    }",
-					"}, (err, res) => {",
-					"    if (err) {",
-					"        console.log(err);",
-					"    } else {",
-					"        // Verifica se a resposta tem um corpo e se o status é de sucesso (200)",
-					"        if (res && res.json && res.status === 200) {",
-					"            try {",
-					"                var responseJson = res.json();",
-					"                pm.collectionVariables.set(\"TOKEN\", responseJson.token);",
-					"            } catch (e) {",
-					"                // Trata o caso em que o JSON não pode ser parseado ou o token não está presente",
-					"                console.log(\"Erro ao parsear a resposta ou token não encontrado:\", e);",
-					"            }",
-					"        } else {",
-					"            console.log(\"Resposta sem corpo ou status de erro:\", res.status);",
-					"        }",
-					"    }",
-					"});",
 					""
 				]
 			}
