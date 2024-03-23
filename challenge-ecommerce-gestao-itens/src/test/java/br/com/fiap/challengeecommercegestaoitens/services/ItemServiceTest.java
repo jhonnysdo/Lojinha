@@ -47,10 +47,7 @@ class ItemServiceTest {
         when(itemRepository.findById(1L)).thenReturn(Optional.of(item));
 
         Optional<ItemDTO> result = itemService.buscarPorId(1L);
-
-       // Item result = itemService.buscarPorId(1L);
-
-        assertEquals(1L, result.get());
+        assertEquals(1L, result.get().getId());
     }
 
     @Test

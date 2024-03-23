@@ -1,6 +1,5 @@
 package br.com.fiap.challengeecommercegestaoitens.handler;
 
-import br.com.fiap.challengeecommercegestaoitens.exceptions.ItemNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,7 @@ public class GlobalExceptionHandlerTest {
         ResponseEntity<GlobalExceptionHandler.ErrorResponse> responseEntity = handler.handleItemNotFoundException (exception);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        assertEquals("Item não encontrado", responseEntity.getBody().message());
+        assertEquals(String.format("%s Item com id %s não encontrado", responseEntity.getStatusCode().value(), 1L), responseEntity.getBody().message());
     }
 
     // Classe auxiliar simulando a ItemNotFoundException
