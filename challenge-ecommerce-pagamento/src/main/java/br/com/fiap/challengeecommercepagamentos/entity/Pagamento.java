@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Builder
@@ -34,7 +35,7 @@ public class Pagamento {
     @NotNull
     private String username;
 
-    private LocalDate dataPagamento;
+    private LocalDateTime dataPagamento;
 
     private FormaPagamento formaPagamento;
 }

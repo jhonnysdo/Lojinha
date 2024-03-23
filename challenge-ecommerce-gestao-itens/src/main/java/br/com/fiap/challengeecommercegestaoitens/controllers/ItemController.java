@@ -17,7 +17,6 @@ import java.util.Optional;
 public class ItemController {
 
     private final ItemService itemService;
-
     private final JwtService jwtService;
 
 
@@ -26,19 +25,36 @@ public class ItemController {
             @RequestBody ItemDTO item,
             @RequestHeader("Authorization") String tokenHeader
     ) {
-        isAuthorized(tokenHeader);
+        isAdminAuthorized(tokenHeader);
         ItemDTO salvo = itemService.salvarItem(item);
         return ResponseEntity.ok(salvo);
     }
 
     @GetMapping
-    public ResponseEntity<List<ItemDTO>> listarTodos() {
+    public ResponseEntity<List<ItemDTO>> listarTodos(
+            @RequestHeader("Authorization") String tokenHeader
+    ) {
+        isAuthorized(tokenHeader);
         return ResponseEntity.ok(itemService.listarTodos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<ItemDTO>> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<Optional<ItemDTO>> buscarPorId(
+            @PathVariable Long id,
+            @RequestHeader("Authorization") String tokenHeader
+    ) {
+        isAuthorized(tokenHeader);
         return ResponseEntity.ok(itemService.buscarPorId(id));
+    }
+
+    @PutMapping("/{id}/quantidade/{quantidade}")
+    public ResponseEntity<ItemDTO> reservarEstoque(
+            @PathVariable Long id,
+            @PathVariable Integer quantidade,
+            @RequestHeader("Authorization") String tokenHeader
+    ) {
+        isAuthorized(tokenHeader);
+        return ResponseEntity.ok(itemService.reservarEstoque(id, quantidade));
     }
 
     @DeleteMapping("/{id}")
@@ -46,7 +62,7 @@ public class ItemController {
             @PathVariable Long id,
             @RequestHeader("Authorization") String tokenHeader
     ) {
-        isAuthorized(tokenHeader);
+        isAdminAuthorized(tokenHeader);
         itemService.deletarItem(id);
         return ResponseEntity.ok().build();
     }
@@ -57,9 +73,21 @@ public class ItemController {
             @RequestBody ItemDTO itemDto,
             @RequestHeader("Authorization") String tokenHeader
     ) {
-        isAuthorized(tokenHeader);
+        isAdminAuthorized(tokenHeader);
         ItemDTO itemAtualizado = itemService.atualizarItem(id, itemDto);
         return ResponseEntity.ok(itemAtualizado);
+    }
+
+    private void isAdminAuthorized(String tokenHeader) {
+        if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
+            throw new UnsupportedOperationException("Invalid token format.");
+        }
+        String token = tokenHeader.substring(7);
+
+        String role = jwtService.extractRole(token);
+        if (!role.equals("ADMIN")) {
+            throw new UnsupportedOperationException("Unauthorized");
+        }
     }
 
     private void isAuthorized(String tokenHeader) {
@@ -69,7 +97,7 @@ public class ItemController {
         String token = tokenHeader.substring(7);
 
         String role = jwtService.extractRole(token);
-        if (!role.equals("ADMIN")) {
+        if (!role.equals("ADMIN") && !role.equals("USER")) {
             throw new UnsupportedOperationException("Unauthorized");
         }
     }

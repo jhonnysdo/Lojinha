@@ -3,6 +3,7 @@ package br.com.fiap.challengeecommercegestaoitens.services;
 import br.com.fiap.challengeecommercegestaoitens.dto.ItemDTO;
 import br.com.fiap.challengeecommercegestaoitens.entity.Item;
 import br.com.fiap.challengeecommercegestaoitens.exceptions.ItemNotFoundException;
+import br.com.fiap.challengeecommercegestaoitens.exceptions.ItemOutOfStockException;
 import br.com.fiap.challengeecommercegestaoitens.repository.ItemRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -57,6 +58,18 @@ public class ItemService {
         item.setPreco(itemAtualizado.getPreco());
         item.setQuantidade(itemAtualizado.getQuantidade());
 
+        return modelMapper.map(itemRepository.save(item), ItemDTO.class);
+    }
+
+    @Transactional
+    public ItemDTO reservarEstoque(Long id, Integer quantidade) {
+        Item item = itemRepository.findById(id).orElseThrow(() -> new ItemNotFoundException(id));
+
+        if (item.getQuantidade() < quantidade) {
+            throw new ItemOutOfStockException(id, item.getQuantidade());
+        }
+
+        item.setQuantidade(item.getQuantidade() - quantidade);
         return modelMapper.map(itemRepository.save(item), ItemDTO.class);
     }
 }

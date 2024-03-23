@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -20,7 +21,7 @@ public class PagamentoDTO {
     private String username;
 
     @NotNull
-    private LocalDate dataPagamento;
+    private LocalDateTime dataPagamento;
 
     @NotNull
     private Long carrinhoId;
