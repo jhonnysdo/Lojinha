@@ -97,7 +97,7 @@ public class CarrinhoService {
                         itemCarrinho.getProdutoId(), itemCarrinho.getQuantidade(), authorizationHeader);
 
                 if (!adicinarItemCarrinho.getStatusCode().is2xxSuccessful()) {
-                    throw new ItemOutOfStockException(itemCarrinho.getProdutoId(), itemCarrinho.getQuantidade());
+                    throw new ItemOutOfStockException(itemCarrinho.getProdutoId());
                 }
 
             } else {
@@ -117,7 +117,7 @@ public class CarrinhoService {
                                 , authorizationHeader);
 
                         if (!atualizaItemCarrinho.getStatusCode().is2xxSuccessful()) {
-                            throw new ItemOutOfStockException(itemCarrinho.getProdutoId(), itemCarrinho.getQuantidade());
+                            throw new ItemOutOfStockException(itemCarrinho.getProdutoId());
                         }
 
                     } else if (itemCarrinhoOptional.get().getQuantidade() > itemCarrinhoDTO.getQuantidade()) {
@@ -140,7 +140,7 @@ public class CarrinhoService {
                             , authorizationHeader);
 
                     if (!atualizaItemCarrinho.getStatusCode().is2xxSuccessful()) {
-                        throw new ItemOutOfStockException(itemCarrinho.getProdutoId(), itemCarrinho.getQuantidade());
+                        throw new ItemOutOfStockException(itemCarrinho.getProdutoId());
                     }
 
                     carrinho.getItens().add(itemCarrinho);

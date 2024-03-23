@@ -70,7 +70,7 @@ public class ProdutoService {
             if (ex.getStatusCode() == HttpStatus.NOT_FOUND) {
                 throw new ItemNotFoundException(produtoId);
             } else if (ex.getStatusCode() == HttpStatus.UNPROCESSABLE_ENTITY) {
-                throw new ItemOutOfStockException(produtoId, quantidade);
+                throw new ItemOutOfStockException(produtoId);
             } else {
                 throw new RuntimeException("Erro ao chamar o serviço de itens.", ex);
             }
