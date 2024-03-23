@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 
 import java.security.Key;
+import java.util.Map;
 import java.util.function.Function;
 @Component
 public class JwtService {
@@ -35,5 +36,21 @@ public class JwtService {
     private Key getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public String extractRole(String token) {
+        Claims claims = extractAllClaims(token);
+        Object roles = claims.get("roles");
+
+        if (roles instanceof Map) {
+            Object authority = ((Map<?, ?>) roles).get("authority");
+            if (authority != null && authority.toString().contains("=")) {
+                return authority.toString().split("=")[1].replaceAll("[^A-Za-z0-9]", "");
+            }
+        } else if (roles != null && roles.toString().contains("=")) {
+            return roles.toString().split("=")[1].replaceAll("[^A-Za-z0-9]", "");
+        }
+
+        return null;
     }
 }

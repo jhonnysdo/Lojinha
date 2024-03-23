@@ -54,6 +54,24 @@ public class CarrinhoController {
         return ResponseEntity.ok("Item removido com sucesso.");
     }
 
+    @PutMapping("/finalizarCompra")
+    public ResponseEntity<String> finalizarCompra(
+            @RequestHeader(value = "Authorization") String authorizationHeader
+    ) {
+        isAuthorized(authorizationHeader);
+        carrinhoService.finalizarCompra(authorizationHeader);
+        return ResponseEntity.ok("Carrinho finalizado com sucesso, aguardando a confirmação do pagamento.");
+    }
+
+    @PutMapping("/cancelarCompra")
+    public ResponseEntity<String> cancelarCompra(
+            @RequestHeader(value = "Authorization") String authorizationHeader
+    ) {
+        isAuthorized(authorizationHeader);
+        carrinhoService.cancelarCompra(authorizationHeader);
+        return ResponseEntity.ok("Carrinho esvaziado com sucesso.");
+    }
+
     private void isAuthorized(String tokenHeader) {
         if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
             throw new HttpUnauthorizedException();

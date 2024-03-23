@@ -3,6 +3,7 @@ package br.com.fiap.challengeecommercepagamentos.handler;
 import br.com.fiap.challengeecommercepagamentos.exceptions.CarrinhoNotFoundException;
 import br.com.fiap.challengeecommercepagamentos.exceptions.ErrorResponse;
 import br.com.fiap.challengeecommercepagamentos.exceptions.HttpUnauthorizedException;
+import br.com.fiap.challengeecommercepagamentos.exceptions.PagamentoNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -15,6 +16,11 @@ import org.springframework.web.context.request.WebRequest;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(PagamentoNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handlePagamentoNotFoundException(PagamentoNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(HttpStatus.NOT_FOUND.value(), exception.getMessage()));
+    }
 
     @ExceptionHandler(HttpUnauthorizedException.class)
     public ResponseEntity<ErrorResponse> handleHttpUnauthorizedException(HttpUnauthorizedException exception) {

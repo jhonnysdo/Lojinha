@@ -1,5 +1,6 @@
 package br.com.fiap.challengeecommercecarrinhodecompras.entity;
 
+import br.com.fiap.challengeecommercecarrinhodecompras.Enum.Status;
 import jakarta.persistence.*;
 
 
@@ -7,7 +8,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,7 +26,8 @@ public class Carrinho {
     @NotNull(message = "O nome de usuário não pode ser nulo nem branco.")
     private String username;
 
-    private boolean fechado;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     private LocalDate dataCriacao;
 

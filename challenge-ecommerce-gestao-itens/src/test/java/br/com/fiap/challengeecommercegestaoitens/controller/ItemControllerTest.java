@@ -33,7 +33,7 @@ public class ItemControllerTest {
         ItemController itemController = new ItemController(mockItemService, jwtService);
 
         // Call the method under test
-        ResponseEntity<List<ItemDTO>> responseEntity = itemController.listarTodos();
+        ResponseEntity<List<ItemDTO>> responseEntity = itemController.listarTodos("token");
         
         // Verify the result
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());

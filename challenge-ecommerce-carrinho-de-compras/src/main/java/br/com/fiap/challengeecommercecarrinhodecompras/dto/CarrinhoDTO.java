@@ -1,5 +1,6 @@
 package br.com.fiap.challengeecommercecarrinhodecompras.dto;
 
+import br.com.fiap.challengeecommercecarrinhodecompras.Enum.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -18,7 +19,8 @@ public class CarrinhoDTO {
     @JsonIgnore
     private String username;
 
-    private boolean fechado;
+    @JsonIgnore
+    private Status status;
 
     private LocalDate dataCriacao;
 
@@ -29,5 +31,10 @@ public class CarrinhoDTO {
     @JsonProperty
     public Long getId() {
         return id;
+    }
+
+    @JsonProperty
+    public Status getStatus() {
+        return status;
     }
 }

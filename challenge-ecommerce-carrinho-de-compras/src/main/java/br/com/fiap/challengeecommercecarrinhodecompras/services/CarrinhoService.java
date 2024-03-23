@@ -1,5 +1,6 @@
 package br.com.fiap.challengeecommercecarrinhodecompras.services;
 
+import br.com.fiap.challengeecommercecarrinhodecompras.Enum.Status;
 import br.com.fiap.challengeecommercecarrinhodecompras.dto.CarrinhoDTO;
 import br.com.fiap.challengeecommercecarrinhodecompras.dto.ItemCarrinhoDTO;
 import br.com.fiap.challengeecommercecarrinhodecompras.dto.ProdutoDTO;
@@ -15,7 +16,6 @@ import org.modelmapper.ModelMapper;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -39,7 +39,7 @@ public class CarrinhoService {
     public CarrinhoDTO listarItensCarrinho(String authorizationHeader) {
         String username = jwtService.extractUsername(authorizationHeader.substring(7));
 
-        Carrinho carrinho = carrinhoRepository.findByUsernameAndFechadoIsFalse(username);
+        Carrinho carrinho = carrinhoRepository.findByUsernameAndStatusIsCriado(username);
         if (carrinho == null) {
             throw new CarrinhoNotFoundException(username);
         }
@@ -61,7 +61,7 @@ public class CarrinhoService {
 
             itemCarrinho.setPrecoUnitario(Objects.requireNonNull(response.getBody()).getPreco());
             itemCarrinho.setProdutoNome(Objects.requireNonNull(response.getBody()).getNome());
-            Carrinho carrinho = carrinhoRepository.findByUsernameAndFechadoIsFalse(
+            Carrinho carrinho = carrinhoRepository.findByUsernameAndStatusIsCriado(
                     jwtService.extractUsername(authorizationHeader.substring(7)));
 
             if (carrinho == null) {
@@ -69,6 +69,7 @@ public class CarrinhoService {
                 carrinho = Carrinho.builder()
                         .username(jwtService.extractUsername(authorizationHeader.substring(7)))
                         .dataCriacao(LocalDate.now())
+                        .status(Status.CRIADO)
                         .itens(new ArrayList<>())
                         .build();
                 carrinho.getItens().add(itemCarrinho);
@@ -106,10 +107,11 @@ public class CarrinhoService {
         }
     }
 
+    @Transactional
     public void removerItemCarrinho(Long id, String authorizationHeader) {
 
         String username = jwtService.extractUsername(authorizationHeader.substring(7));
-        Carrinho carrinho = carrinhoRepository.findByUsernameAndFechadoIsFalse(username);
+        Carrinho carrinho = carrinhoRepository.findByUsernameAndStatusIsCriado(username);
 
         if (carrinho == null) {
 
@@ -134,5 +136,33 @@ public class CarrinhoService {
             throw new ItemNotFoundException(id);
 
         }
+    }
+
+    @Transactional
+    public void finalizarCompra(String authorizationHeader) {
+
+        String username = jwtService.extractUsername(authorizationHeader.substring(7));
+        Carrinho carrinho = carrinhoRepository.findByUsernameAndStatusIsCriado(username);
+
+        if (carrinho == null) {
+            throw new CarrinhoNotFoundException(username);
+        }
+
+        carrinho.setStatus(Status.PENDENTE_PAGAMENTO);
+        carrinhoRepository.save(carrinho);
+    }
+
+    @Transactional
+    public void cancelarCompra(String authorizationHeader) {
+
+        String username = jwtService.extractUsername(authorizationHeader.substring(7));
+        Carrinho carrinho = carrinhoRepository.findByUsernameAndStatusIsCriado(username);
+
+        if (carrinho == null) {
+            throw new CarrinhoNotFoundException(username);
+        }
+
+        carrinho.setStatus(Status.CANCELADO);
+        carrinhoRepository.save(carrinho);
     }
 }
