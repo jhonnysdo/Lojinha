@@ -61,10 +61,15 @@ Importante: para consultar todas as opções de APIs, favor acessar a collection
 - Carrinho de Compras: Serviço para gerenciar o carrinho de compras dos usuários.
 - Pagamento (Simulação): Serviço para simular o processo de pagamento.
 
+## Diagrama de arquitetura:
+![diagrama_arquitetura_sistema](https://private-user-images.githubusercontent.com/57017906/316351221-d6a62333-5870-4714-92f8-22c4dc0cb5c4.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTEzMjQ2NzMsIm5iZiI6MTcxMTMyNDM3MywicGF0aCI6Ii81NzAxNzkwNi8zMTYzNTEyMjEtZDZhNjIzMzMtNTg3MC00NzE0LTkyZjgtMjJjNGRjMGNiNWM0LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAzMjQlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMzI0VDIzNTI1M1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTk3MzJjNzhjZjQ3NzQxYWI2MTBlM2Y3YWNiOGIyYTNhMDgxMWEyMjNlMWJjY2Y3MzlhZWM0MzJhZjI2ZmUyZGImWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.DCv7OMo7yIQ_CH-0hk5w_q5glsxM-AiRsAPZ4DLUaK0)
+
+
+
+
 ## Desafios
 
-
-Optamos por adotar uma abordagem monolítica para o desenvolvimento de nossa aplicação, visando otimizar o tempo e concentrar esforços em outras áreas do projeto.
+Optamos por adotar uma abordagem com microsserviços para o desenvolvimento de nossa aplicação, visando otimizar o tempo e concentrar esforços em outras áreas do projeto.
 
 Decidimos alcançar uma cobertura de testes de 50% para refletir o conhecimento adquirido até o momento, permitindo-nos avançar para a próxima fase do projeto.
 
@@ -95,10 +100,9 @@ Para facilitar o teste e a utilização da API, disponibilizamos um arquivo do P
 Basta importar esse arquivo para o seu ambiente do Postman e começar a usar as requisições imediatamente.
 
 ## Diagrama de tabelas:
-![Imagem do WhatsApp de 2024-03-13 à(s) 15 09 19_4d8cc485](https://github.com/otavioprado/fiap-hackathon-booking/assets/133544024/ad57fc12-7514-4d5c-871e-f9534d2fc710)
+![]()
 
 ## Coverage dos testes:
-![img_1.png](img_1.png)
+![]()
 
-## Diagrama de arquitetura:
-![diagrama_arquitetura_sistema](https://github.com/otavioprado/fiap-hackathon-booking/assets/133544024/671b356a-ffe0-4fa0-9970-8fac0b7fee70)
+
