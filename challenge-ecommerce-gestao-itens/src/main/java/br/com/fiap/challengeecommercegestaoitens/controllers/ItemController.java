@@ -5,9 +5,12 @@ import br.com.fiap.challengeecommercegestaoitens.exceptions.UnauthorizedErrorExc
 import br.com.fiap.challengeecommercegestaoitens.services.ItemService;
 import br.com.fiap.challengeecommercegestaoitens.services.JwtService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -15,12 +18,13 @@ import java.util.Optional;
 @RequestMapping
 @OpenAPIDefinition
 @AllArgsConstructor
+@Tag(name = "Item", description = "APIs Relacionadas ao Item/Produto")
 public class ItemController {
 
     private final ItemService itemService;
     private final JwtService jwtService;
 
-
+    @Operation(summary = "Adiciona Item")
     @PostMapping
     public ResponseEntity<ItemDTO> adicionarItem(
             @RequestBody ItemDTO item,
@@ -31,6 +35,7 @@ public class ItemController {
         return ResponseEntity.ok(salvo);
     }
 
+    @Operation(summary = "Lista todos os Itens")
     @GetMapping
     public ResponseEntity<List<ItemDTO>> listarTodos(
             @RequestHeader("Authorization") String tokenHeader
@@ -39,6 +44,7 @@ public class ItemController {
         return ResponseEntity.ok(itemService.listarTodos());
     }
 
+    @Operation(summary = "Busca Item por ID")
     @GetMapping("/{id}")
     public ResponseEntity<Optional<ItemDTO>> buscarPorId(
             @PathVariable Long id,
@@ -48,6 +54,7 @@ public class ItemController {
         return ResponseEntity.ok(itemService.buscarPorId(id));
     }
 
+    @Operation(summary = "Adiciona Item ao Carrinho")
     @PutMapping("/adicinarItemCarrinho/{id}/quantidade/{quantidade}")
     public ResponseEntity<ItemDTO> reservarEstoque(
             @PathVariable Long id,
@@ -58,6 +65,8 @@ public class ItemController {
         itemService.reservarEstoque(id, quantidade);
         return ResponseEntity.ok().build();
     }
+
+    @Operation(summary = "Remove Item do Carrinho")
     @PutMapping("/removerItemCarrinho/{id}/quantidade/{quantidade}")
     public ResponseEntity<ItemDTO> desreservarEstoque(
             @PathVariable Long id,
@@ -69,7 +78,7 @@ public class ItemController {
         return ResponseEntity.ok().build();
     }
 
-
+    @Operation(summary = "Deleta Item")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarItem(
             @PathVariable Long id,
@@ -80,6 +89,7 @@ public class ItemController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "Atualiza Item")
     @PutMapping("/{id}")
     public ResponseEntity<ItemDTO> atualizarItem(
             @PathVariable Long id,

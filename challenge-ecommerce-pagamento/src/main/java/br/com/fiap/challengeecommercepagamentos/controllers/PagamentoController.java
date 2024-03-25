@@ -8,6 +8,8 @@ import br.com.fiap.challengeecommercepagamentos.exceptions.HttpUnauthorizedExcep
 import br.com.fiap.challengeecommercepagamentos.services.JwtService;
 import br.com.fiap.challengeecommercepagamentos.services.PagamentoService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +21,14 @@ import java.util.List;
 @RequestMapping
 @AllArgsConstructor
 @OpenAPIDefinition
+@Tag(name = "Pagamento", description = "APIs Relacionadas ao Pagamento")
 public class PagamentoController {
 
     private final JwtService jwtService;
 
     private PagamentoService pagamentoService;
 
+    @Operation(summary = "Lista Todos os Pagamentos")
     @GetMapping("/todos")
     public ResponseEntity<List<PagamentoDTO>> listarTodos(
             @RequestHeader(value = "Authorization") String authorizationHeader
@@ -33,6 +37,7 @@ public class PagamentoController {
         return ResponseEntity.ok(pagamentoService.listarTodos(authorizationHeader));
     }
 
+    @Operation(summary = "Realiza Pagamento")
     @PutMapping("/pagar/{formaPagamento}")
     public ResponseEntity<String> realizarPagamento(
             @PathVariable FormaPagamento formaPagamento,
@@ -43,6 +48,7 @@ public class PagamentoController {
         return ResponseEntity.ok("Pagamento realizado com sucesso");
     }
 
+    @Operation(summary = "Cancelar Pagamento")
     @PutMapping("/cancelar")
     public ResponseEntity<String> cancelarPagamento(
             @RequestHeader(value = "Authorization") String authorizationHeader
@@ -52,6 +58,7 @@ public class PagamentoController {
         return ResponseEntity.ok("Pagamento cancelado com sucesso");
     }
 
+    @Operation(summary = "Consultar Pagamento")
     @GetMapping
     public ResponseEntity<Pagamento> consultar(@RequestParam String id) {
         return ResponseEntity.ok(new Pagamento());
