@@ -22,6 +22,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -41,10 +42,23 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     // fix: https://github.com/spring-projects/spring-security/issues/4368#issuecomment-709562668
     private final RequestMatcher requestMatcher = new AntPathRequestMatcher("/api/v1/auth/**");
 
+    private final List<String> SWAGGER_ENDPOINTS = List.of("/v3/api-docs",
+    "/swagger-ui/", "/swagger-ui/index.html");
+
+
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         if (!this.requestMatcher.matches(request)) {
             try {
+
+                final String requestURI = request.getRequestURI();
+
+                if (isSwaggerEndpoint(requestURI)) {
+                    // Se a solicitação for para um endpoint do Swagger, permita-a sem autenticação JWT
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+
                 final String authHeader = request.getHeader("Authorization");
                 String token = null;
                 String username = null;
@@ -74,5 +88,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         } else {
             filterChain.doFilter(request, response);
         }
+    }
+
+    private boolean isSwaggerEndpoint(String requestURI) {
+        return SWAGGER_ENDPOINTS.stream().anyMatch(requestURI::startsWith);
     }
 }

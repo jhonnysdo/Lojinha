@@ -4,16 +4,16 @@ import br.com.fiap.challengeecommercegestaoitens.dto.ItemDTO;
 import br.com.fiap.challengeecommercegestaoitens.exceptions.UnauthorizedErrorException;
 import br.com.fiap.challengeecommercegestaoitens.services.ItemService;
 import br.com.fiap.challengeecommercegestaoitens.services.JwtService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
-
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping
+@OpenAPIDefinition
 @AllArgsConstructor
 public class ItemController {
 

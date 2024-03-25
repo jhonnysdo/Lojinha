@@ -5,9 +5,9 @@ import br.com.fiap.challengeecommercecarrinhodecompras.dto.ItemCarrinhoDTO;
 import br.com.fiap.challengeecommercecarrinhodecompras.exceptions.HttpUnauthorizedException;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.CarrinhoService;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.JwtService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/carrinho")
 @AllArgsConstructor
+@OpenAPIDefinition
 public class CarrinhoController {
 
     private CarrinhoService carrinhoService;

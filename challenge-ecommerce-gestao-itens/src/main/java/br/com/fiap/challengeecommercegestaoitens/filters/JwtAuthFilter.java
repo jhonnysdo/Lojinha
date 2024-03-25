@@ -18,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -27,6 +28,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final String AUTH_URL = "http://localhost:8080/api/v1/auth/validate";
 
     private final RestTemplate restTemplate;
+    private final List<String> SWAGGER_ENDPOINTS = List.of("/gestao-itens/v3/api-docs",
+    "/gestao-itens/swagger-ui/", "/gestao-itens/swagger-ui/index.html");
+
 
     public JwtAuthFilter(JwtService jwtService, RestTemplate restTemplate) {
         this.jwtService = jwtService;
@@ -37,6 +41,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
         final String jwtToken;
+
+        final String requestURI = request.getRequestURI();
+
+        if (isSwaggerEndpoint(requestURI)) {
+            // Se a solicitação for para um endpoint do Swagger, permita-a sem autenticação JWT
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             response.setStatus(403);
@@ -60,5 +72,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         } catch (HttpClientErrorException e) {
             response.setStatus(403);
         }
+    }
+
+    private boolean isSwaggerEndpoint(String requestURI) {
+        return SWAGGER_ENDPOINTS.stream().anyMatch(requestURI::startsWith);
     }
 }
