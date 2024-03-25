@@ -3,10 +3,13 @@ package br.com.fiap.challengeecommercecarrinhodecompras.controllers;
 import br.com.fiap.challengeecommercecarrinhodecompras.Enum.Status;
 import br.com.fiap.challengeecommercecarrinhodecompras.dto.CarrinhoDTO;
 import br.com.fiap.challengeecommercecarrinhodecompras.dto.ProdutoDTO;
+import br.com.fiap.challengeecommercecarrinhodecompras.entity.Carrinho;
 import br.com.fiap.challengeecommercecarrinhodecompras.entity.ItemCarrinho;
+import br.com.fiap.challengeecommercecarrinhodecompras.repository.CarrinhoRepository;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.CarrinhoService;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.JwtService;
 import br.com.fiap.challengeecommercecarrinhodecompras.services.ProdutoService;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +39,9 @@ class CarrinhoControllerTest {
 
     @MockBean
     private CarrinhoService carrinhoService;
+
+    @MockBean
+    private CarrinhoRepository carrinhoRepository;
 
     @MockBean
     private JwtService jwtService;
@@ -98,14 +104,17 @@ class CarrinhoControllerTest {
      */
     @Test
     void removerItemCarrinhoTest() throws Exception {
-
+        var carrinho = new Carrinho();
+        ArrayList<ItemCarrinho> itens = new ArrayList<>();
+        itens.add(new ItemCarrinho(1L, 1L, 1, "ps5", 3500.00));
+        carrinho.setItens(itens);
         // Mock CarrinhoService method to not perform actions, because we are not testing service layer here
         doNothing().when(carrinhoService).removerProdutoCarrinho(anyLong(), anyString());
-
+        Mockito.when(carrinhoRepository.findByUsernameAndStatusIsCriado(anyString())).thenReturn(carrinho);
         Mockito.when(jwtService.extractRole(any())).thenReturn("USER");
 
         // Perform the HTTP DELETE request and expect 200 OK status and "Item removido com sucesso." message in response
-        this.mockMvc.perform(delete("/carrinho/itens/{id}", 1)
+        this.mockMvc.perform(delete("/carrinho/produto/{id}", 1)
                         .header("Authorization", "Bearer token"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Item removido com sucesso."));

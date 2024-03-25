@@ -16,7 +16,8 @@ public class GlobalExceptionHandlerTest {
         ResponseEntity<GlobalExceptionHandler.ErrorResponse> responseEntity = handler.handleItemNotFoundException (exception);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        assertEquals(String.format("%s Item com id %s não encontrado", responseEntity.getStatusCode().value(), 1L), responseEntity.getBody().message());
+        assertEquals(String.format("%s - Item com id %s não encontrado", responseEntity.getStatusCode().value(), 1L), responseEntity.getBody().message());
+
     }
 
     // Classe auxiliar simulando a ItemNotFoundException
