@@ -26,12 +26,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8091/gestao-itens/ping",
+							"raw": "http://localhost:8081/gestao-itens/ping",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8091",
+							"port": "8081",
 							"path": [
 								"gestao-itens",
 								"ping"
@@ -56,12 +56,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8091/gestao-itens",
+							"raw": "http://localhost:8081/gestao-itens",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8091",
+							"port": "8081",
 							"path": [
 								"gestao-itens"
 							]
@@ -85,12 +85,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8091/gestao-itens/1",
+							"raw": "http://localhost:8081/gestao-itens/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8091",
+							"port": "8081",
 							"path": [
 								"gestao-itens",
 								"1"
@@ -124,12 +124,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8091/gestao-itens/",
+							"raw": "http://localhost:8081/gestao-itens/",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8091",
+							"port": "8081",
 							"path": [
 								"gestao-itens",
 								""
@@ -163,12 +163,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8091/gestao-itens/1",
+							"raw": "http://localhost:8081/gestao-itens/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8091",
+							"port": "8081",
 							"path": [
 								"gestao-itens",
 								"1"
