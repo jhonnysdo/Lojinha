@@ -7,7 +7,7 @@ import br.com.fiap.challengeecommercepagamentos.enums.FormaPagamento;
 import br.com.fiap.challengeecommercepagamentos.exceptions.HttpUnauthorizedException;
 import br.com.fiap.challengeecommercepagamentos.services.JwtService;
 import br.com.fiap.challengeecommercepagamentos.services.PagamentoService;
-import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping
 @AllArgsConstructor
+@OpenAPIDefinition
 public class PagamentoController {
 
     private final JwtService jwtService;
