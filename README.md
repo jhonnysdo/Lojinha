@@ -102,7 +102,7 @@ http://localhost:8082/carrinho-de-compras/swagger-ui.html
 ```
 ### 🔧Microsserviço Pagamentos
 ```shell
-http://localhost:8082/pagamentos/swagger-ui.html
+http://localhost:8083/pagamentos/swagger-ui.html
 ```
 
 
