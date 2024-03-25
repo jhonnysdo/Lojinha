@@ -36,9 +36,9 @@ curl --location 'http://localhost:8083/pagamentos/formas-pagamento'
 
 Importante: para consultar todas as opções de APIs, favor acessar a collection POSTMAN disponibilizada:
 
-- [FIAP - Booking.postman_collection.json](src%2Fmain%2Fresources%2FFIAP%20-%20Booking.postman_collection.json)
+- [Tech challenge 5 - Ecommerce.postman_collection.json](https://github.com/jhonnysdo/Lojinha/blob/main/Tech%20challenge%205%20-%20Ecommerce.postman_collection.json)
 
-![img.png](img.png)
+![Postman Collection TechChallenge5.png](https://github.com/jhonnysdo/Lojinha/blob/main/Postman%20Collection%20TechChallenge5.png?raw=true)
 
 
 ## 🔭Tecnologias e ferramentas utilizadas:
@@ -62,7 +62,7 @@ Importante: para consultar todas as opções de APIs, favor acessar a collection
 - Pagamento (Simulação): Serviço para simular o processo de pagamento.
 
 ## 📐Diagrama de arquitetura:
-![diagrama_arquitetura_sistema](https://private-user-images.githubusercontent.com/57017906/316351221-d6a62333-5870-4714-92f8-22c4dc0cb5c4.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTEzMjQ2NzMsIm5iZiI6MTcxMTMyNDM3MywicGF0aCI6Ii81NzAxNzkwNi8zMTYzNTEyMjEtZDZhNjIzMzMtNTg3MC00NzE0LTkyZjgtMjJjNGRjMGNiNWM0LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAzMjQlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMzI0VDIzNTI1M1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTk3MzJjNzhjZjQ3NzQxYWI2MTBlM2Y3YWNiOGIyYTNhMDgxMWEyMjNlMWJjY2Y3MzlhZWM0MzJhZjI2ZmUyZGImWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.DCv7OMo7yIQ_CH-0hk5w_q5glsxM-AiRsAPZ4DLUaK0)
+![ArchitectureDiagram.png](https://github.com/jhonnysdo/Lojinha/blob/main/ArchitectureDiagram.png?raw=true)
 
 
 
@@ -81,25 +81,26 @@ Esses foram alguns dos aspectos considerados pela equipe durante a fase inicial 
 
 ## 📝Consultando a Documentação da API
 Acessa o arquivo swagger da aplicação pelo link: [api-docs.json](src%2Fmain%2Fresources%2Fapi-docs.json)
+
 Basta colar o documento no site: [Swagger Editor](https://editor.swagger.io/)
 
-Você pode também pode consultar a documentação da API em run-time. Para isso, siga os passos abaixo:
+Você pode também pode consultar a documentação da API em run-time. Para isso, siga os passos abaixo.
 
 Certifique-se de que os microsserviços estejam em execução.
 Abra um navegador web e navegue até:
-### Microsserviço Autenticação de Usuários
+### 🔧Microsserviço Autenticação de Usuários
 ```shell
 http://localhost:8080/swagger-ui.html
 ```
-### Microsserviço Gestão de Itens
+### 🔧Microsserviço Gestão de Itens
 ```shell
 http://localhost:8081/gestao-itens/swagger-ui.html
 ```
-### Microsserviço Carrinho de Compras
+### 🔧Microsserviço Carrinho de Compras
 ```shell
 http://localhost:8082/carrinho-de-compras/swagger-ui.html
 ```
-### Microsserviço Pagamentos
+### 🔧Microsserviço Pagamentos
 ```shell
 http://localhost:8082/pagamentos/swagger-ui.html
 ```
@@ -122,6 +123,6 @@ Basta importar esse arquivo para o seu ambiente do Postman e começar a usar as 
 
 ## Coverage dos testes:
 
-![Coverage](https://private-user-images.githubusercontent.com/57017906/316360275-0060cc08-5687-46ff-995c-58194bbc3a4a.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTEzMzAxNTIsIm5iZiI6MTcxMTMyOTg1MiwicGF0aCI6Ii81NzAxNzkwNi8zMTYzNjAyNzUtMDA2MGNjMDgtNTY4Ny00NmZmLTk5NWMtNTgxOTRiYmMzYTRhLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAzMjUlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMzI1VDAxMjQxMlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTFmZGUwZTY0YTZhZDgxYmU4MDg2NTRlZjMwNzNlYWMyN2QwNWI4NjlhNjlkOTljNGY4YzBlMDlkMDZlYmI5MTMmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.FZpysF2M53fQmVNO2InFKiFlYllRSoJ7xydOXBhRbwc)
+![CovarageTechChallenge5.png](https://github.com/jhonnysdo/Lojinha/blob/main/CovarageTechChallenge5.png?raw=true)
 
 
