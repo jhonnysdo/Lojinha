@@ -1,0 +1,238 @@
+openapi: 3.0.1
+info:
+  title: Tech Challenge 5 - E-commerce System - Microsserviço de Pagamentos
+  description: Esse Microsserviço é Responsável por Realizar Pagamentos no Sistema de E-Commerce.
+  version: '1'
+servers:
+  - url: http://localhost:8083/pagamentos
+    description: Generated server url
+tags:
+  - name: Verifica Token JWT
+    description: APIs Relacionadas a Verificação de Autenticação
+  - name: Pagamento
+    description: APIs Relacionadas ao Pagamento
+paths:
+  /pagar/{formaPagamento}:
+    put:
+      tags:
+        - Pagamento
+      summary: Realiza Pagamento
+      operationId: realizarPagamento
+      parameters:
+        - name: formaPagamento
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - PIX
+              - BOLETO
+              - CARTAO_CREDITO
+              - CARTAO_DEBITO
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /cancelar:
+    put:
+      tags:
+        - Pagamento
+      summary: Cancelar Pagamento
+      operationId: cancelarPagamento
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /todos:
+    get:
+      tags:
+        - Pagamento
+      summary: Lista Todos os Pagamentos
+      operationId: listarTodos
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PagamentoDTO'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /ping:
+    get:
+      tags:
+        - Verifica Token JWT
+      summary: Verificar Status Token
+      description: Verifica se o token está ativo.
+      operationId: test
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /:
+    get:
+      tags:
+        - Pagamento
+      summary: Consultar Pagamento
+      operationId: consultar_1
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Pagamento'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+        stackTrace:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+    ValidationError:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    PagamentoDTO:
+      required:
+        - carrinhoId
+        - carrinhoValorTotal
+        - dataPagamento
+        - formaPagamento
+        - status
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        dataPagamento:
+          type: string
+          format: date-time
+        carrinhoId:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+            - CRIADO
+            - CANCELADO
+            - PAGO
+        carrinhoValorTotal:
+          type: number
+          format: double
+        formaPagamento:
+          type: string
+          enum:
+            - PIX
+            - BOLETO
+            - CARTAO_CREDITO
+            - CARTAO_DEBITO
+    Pagamento:
+      required:
+        - carrinhoId
+        - carrinhoValorTotal
+        - status
+        - username
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        carrinhoId:
+          type: integer
+          format: int64
+        carrinhoValorTotal:
+          type: number
+          format: double
+        status:
+          type: string
+          enum:
+            - CRIADO
+            - CANCELADO
+            - PAGO
+        username:
+          type: string
+        dataPagamento:
+          type: string
+          format: date-time
+        formaPagamento:
+          type: string
+          enum:
+            - PIX
+            - BOLETO
+            - CARTAO_CREDITO
+            - CARTAO_DEBITO

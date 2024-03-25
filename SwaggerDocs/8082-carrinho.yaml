@@ -1,0 +1,313 @@
+openapi: 3.0.1
+info:
+  title: Tech Challenge 5 - E-commerce System - Microsserviço de Carrinho de compras
+  description: Esse microsserviço é responsável por gerenciar o carrinho de compras do e-commerce.
+  version: '1'
+servers:
+  - url: http://localhost:8082/carrinho-de-compras
+    description: Generated server url
+tags:
+  - name: Verifica Token JWT
+    description: APIs Relacionadas a Verificação de Autenticação
+  - name: Carrinho
+    description: APIs Relacionadas ao Carrinho de Compras
+paths:
+  /carrinho/finalizarCompra:
+    put:
+      tags:
+        - Carrinho
+      summary: Finaliza a Compra (Apenas Usuário)
+      operationId: finalizarCompra
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /carrinho/cancelarCompra:
+    put:
+      tags:
+        - Carrinho
+      summary: Cancelar a Compra
+      operationId: cancelarCompra
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CarrinhoDTO'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /carrinho/atualizarStatusPago:
+    put:
+      tags:
+        - Carrinho
+      summary: Atualiza Status do Carrinho para Pago
+      operationId: atualizarStatusPago
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CarrinhoDTO'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /carrinho:
+    get:
+      tags:
+        - Carrinho
+      summary: Lista Carrinho do Usuário (Apenas Usuário)
+      operationId: listarCarrinhoUsuario
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CarrinhoDTO'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - Carrinho
+      summary: Adiciona Item ao Carrinho
+      operationId: adicionarItemCarrinho
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemCarrinhoDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CarrinhoDTO'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /ping:
+    get:
+      tags:
+        - Verifica Token JWT
+      summary: Verificar Status Token
+      description: Verifica se o token está ativo
+      operationId: pingResponse
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /carrinho/todos:
+    get:
+      tags:
+        - Carrinho
+      summary: Lista Todos os Carrinhos de Compras (Apenas Admin)
+      operationId: listarTodosCarrinhos
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarrinhoDTO'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /carrinho/pendentePagamento:
+    get:
+      tags:
+        - Carrinho
+      summary: Lista Carrinho do Usuário com Status Pendente de Pagamento
+      operationId: listarCarrinhoPendentePagamento
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CarrinhoDTO'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /carrinho/produto/{id}:
+    delete:
+      tags:
+        - Carrinho
+      summary: Remove Item do Carrinho
+      operationId: removerProdutoCarrinho
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+        stackTrace:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+    ValidationError:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    CarrinhoDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+            - CRIADO
+            - PENDENTE_PAGAMENTO
+            - PAGO
+            - CANCELADO
+        dataCriacao:
+          type: string
+          format: date
+        valorTotal:
+          type: number
+          format: double
+        itens:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemCarrinhoDTO'
+    ItemCarrinhoDTO:
+      required:
+        - produtoId
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        produtoId:
+          type: integer
+          format: int64
+        produtoNome:
+          type: string
+        quantidade:
+          minimum: 1
+          type: integer
+          format: int32
+        precoUnitario:
+          type: number
+          format: double

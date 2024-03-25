@@ -1,0 +1,230 @@
+openapi: 3.0.1
+info:
+  title: Tech Challenge 5 - E-commerce System - Microsserviço de Gestão de Itens
+  description: Esse microsserviço é responsável por Gerenciar os Itens do E-Commerce.
+  version: '1.0'
+servers:
+  - url: http://localhost:8081/gestao-itens
+    description: Generated server url
+tags:
+  - name: Verifica Token JWT
+    description: API para verificar se o token JWT está funcionando corretamente.
+  - name: Item
+    description: APIs Relacionadas ao Item/Produto
+paths:
+  /{id}:
+    get:
+      tags:
+        - Item
+      summary: Busca Item por ID
+      operationId: buscarPorId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ItemDTO'
+    put:
+      tags:
+        - Item
+      summary: Atualiza Item
+      operationId: atualizarItem
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ItemDTO'
+    delete:
+      tags:
+        - Item
+      summary: Deleta Item
+      operationId: deletarItem
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /removerItemCarrinho/{id}/quantidade/{quantidade}:
+    put:
+      tags:
+        - Item
+      summary: Remove Item do Carrinho
+      operationId: desreservarEstoque
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: quantidade
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ItemDTO'
+  /adicinarItemCarrinho/{id}/quantidade/{quantidade}:
+    put:
+      tags:
+        - Item
+      summary: Adiciona Item ao Carrinho
+      operationId: reservarEstoque
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: quantidade
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ItemDTO'
+  /:
+    get:
+      tags:
+        - Item
+      summary: Lista todos os Itens
+      operationId: listarTodos_1
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemDTO'
+    post:
+      tags:
+        - Item
+      summary: Adiciona Item
+      operationId: adicionarItem_1
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ItemDTO'
+  /ping:
+    get:
+      tags:
+        - Verifica Token JWT
+      summary: Verifica Status Token
+      description: Verifica se o token está ativo
+      operationId: test
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+components:
+  schemas:
+    ItemDTO:
+      required:
+        - nome
+        - preco
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nome:
+          type: string
+        quantidade:
+          minimum: 1
+          type: integer
+          format: int32
+        preco:
+          type: number
+          format: double
