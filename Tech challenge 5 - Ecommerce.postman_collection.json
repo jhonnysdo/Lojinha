@@ -1,9 +1,10 @@
 {
 	"info": {
-		"_postman_id": "8ab050ef-a422-4569-a1c3-ddf04ac841fb",
-		"name": "Tech challenge 5 - Ecommerce",
+		"_postman_id": "8dcd2d21-2ac1-429a-a607-230d6f549934",
+		"name": "Tech challenge 5 - Ecommerce Grupo 12",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "30130717"
+		"_exporter_id": "27681645",
+		"_collection_link": "https://warped-meteor-302132.postman.co/workspace/API-E-Commerce~5769ea1f-d65e-4e1e-a776-57d5917b3cf6/collection/27681645-8dcd2d21-2ac1-429a-a607-230d6f549934?action=share&source=collection_link&creator=27681645"
 	},
 	"item": [
 		{
@@ -40,7 +41,7 @@
 					"response": []
 				},
 				{
-					"name": "Get all itens",
+					"name": "Buscar Todos Itens",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -69,7 +70,7 @@
 					"response": []
 				},
 				{
-					"name": "Get item by id",
+					"name": "Buscare Item po ID",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -212,7 +213,7 @@
 					"response": []
 				},
 				{
-					"name": "API Lista Carrinho",
+					"name": "Listar Itens no Carrinho",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -326,7 +327,7 @@
 					"response": []
 				},
 				{
-					"name": "API Fechar Carrinho",
+					"name": "Fechar Carrinho",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -442,7 +443,37 @@
 					"response": []
 				},
 				{
-					"name": "API pagar",
+					"name": "Listar Todos Pagamentos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/pagamentos/todos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"pagamentos",
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Realizar Pagamento",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -473,7 +504,7 @@
 					"response": []
 				},
 				{
-					"name": "API Cancelar Pagamento",
+					"name": "Cancelar Pagamento",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -501,104 +532,12 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "API Listar Todos Pagamentos",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8083/pagamentos/todos",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8083",
-							"path": [
-								"pagamentos",
-								"todos"
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		},
 		{
 			"name": "Autenticação Usuário",
 			"item": [
-				{
-					"name": "API Cadastrar usuário",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"username\": \"otavioaxx\",\n    \"password\": \"otavioax\",\n    \"role\": \"ADMIN\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/api/v1/auth/signup",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"signup"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "API Logar usuário",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"username\": \"otavioaxx\",\n    \"password\": \"otavioax\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/api/v1/auth/signin",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"signin"
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "Ping",
 					"request": {
@@ -629,7 +568,7 @@
 					"response": []
 				},
 				{
-					"name": "API Validar usuário",
+					"name": "Validar usuário",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -662,6 +601,68 @@
 								"v1",
 								"auth",
 								"validate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar usuário",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"otavioaxx\",\n    \"password\": \"otavioax\",\n    \"role\": \"ADMIN\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logar usuário",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"otavioaxx\",\n    \"password\": \"otavioax\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/signin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"signin"
 							]
 						}
 					},
