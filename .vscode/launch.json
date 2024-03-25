@@ -1,0 +1,64 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ChallengeEcommerceCarrinhoDeComprasApplication<br.com.fiap-challenge-ecommerce-carrinho-de-compras>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "br.com.fiap.challengeecommercecarrinhodecompras.ChallengeEcommerceCarrinhoDeComprasApplication",
+            "projectName": "br.com.fiap-challenge-ecommerce-carrinho-de-compras",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ChallengeEcommerceGestaoItensApplication<challenge-ecommerce-gestao-itens>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "br.com.fiap.challengeecommercegestaoitens.ChallengeEcommerceGestaoItensApplication",
+            "projectName": "challenge-ecommerce-gestao-itens",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ChallengeEcommercePagamentosApplication<challenge-ecommerce-pagamento>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "br.com.fiap.challengeecommercepagamentos.ChallengeEcommercePagamentosApplication",
+            "projectName": "challenge-ecommerce-pagamento",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ChallengeEcommerceLoginApplication<br.com.fiap-challenge-ecommerce-login>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "br.com.fiap.challengeecommercelogin.ChallengeEcommerceLoginApplication",
+            "projectName": "br.com.fiap-challenge-ecommerce-login",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ChallengeEcommerceCarrinhoDeComprasApplication<challenge-ecommerce-carrinho-de-compras>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "br.com.fiap.challengeecommercecarrinhodecompras.ChallengeEcommerceCarrinhoDeComprasApplication",
+            "projectName": "challenge-ecommerce-carrinho-de-compras",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ChallengeEcommerceLoginApplication<challenge-ecommerce-login>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "br.com.fiap.challengeecommercelogin.ChallengeEcommerceLoginApplication",
+            "projectName": "challenge-ecommerce-login",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

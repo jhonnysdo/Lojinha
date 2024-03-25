@@ -26,7 +26,7 @@ public class ProdutoService {
             String authorizationHeader
     ) {
 
-        String url = "http://localhost:8091/gestao-itens/"
+        String url = "http://localhost:8081/gestao-itens/"
                 + produtoId;
         return callService(url, produtoId, 0, authorizationHeader, HttpMethod.GET);
     }
@@ -37,7 +37,7 @@ public class ProdutoService {
             String authorizationHeader
     ) {
 
-        String url = "http://localhost:8091/gestao-itens/adicinarItemCarrinho/"
+        String url = "http://localhost:8081/gestao-itens/adicinarItemCarrinho/"
                 + produtoId + "/quantidade/" + quantidade;
         return callService(url, produtoId, quantidade, authorizationHeader, HttpMethod.PUT);
     }
@@ -48,7 +48,7 @@ public class ProdutoService {
             String authorizationHeader
     ) {
 
-        String url = "http://localhost:8091/gestao-itens/removerItemCarrinho/"
+        String url = "http://localhost:8081/gestao-itens/removerItemCarrinho/"
                 + produtoId + "/quantidade/" + quantidade;
         return callService(url, produtoId, quantidade, authorizationHeader, HttpMethod.PUT);
     }
