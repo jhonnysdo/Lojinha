@@ -90,19 +90,19 @@ Certifique-se de que os microsserviços estejam em execução.
 Abra um navegador web e navegue até:
 ### 🔧Microsserviço Autenticação de Usuários
 ```shell
-http://localhost:8080/swagger-ui.html
+http://localhost:8080/swagger-ui/index.html
 ```
 ### 🔧Microsserviço Gestão de Itens
 ```shell
-http://localhost:8081/gestao-itens/swagger-ui.html
+http://localhost:8081/gestao-itens/swagger-ui/index.html
 ```
 ### 🔧Microsserviço Carrinho de Compras
 ```shell
-http://localhost:8082/carrinho-de-compras/swagger-ui.html
+http://localhost:8082/carrinho-de-compras/swagger-ui/index.html
 ```
 ### 🔧Microsserviço Pagamentos
 ```shell
-http://localhost:8083/pagamentos/swagger-ui.html
+http://localhost:8083/pagamentos/swagger-ui/index.html
 ```
 
 
