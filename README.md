@@ -112,7 +112,7 @@ Isso abrirá a interface do Swagger, onde você poderá explorar todos os endpoi
 Para facilitar o teste e a utilização da API, disponibilizamos um arquivo do Postman com todas as requisições pré-configuradas. Você pode encontrar o arquivo em:
 
 ```shell
-./fiap-hackathon-booking/src/main/resources/FIAP - Booking.postman_collection.json
+./Lojinha/Tech challenge 5 - Ecommerce.postman_collection.json
 ```
 
 Basta importar esse arquivo para o seu ambiente do Postman e começar a usar as requisições imediatamente.
@@ -121,6 +121,7 @@ Basta importar esse arquivo para o seu ambiente do Postman e começar a usar as 
 ![]()
 
 ## Coverage dos testes:
-![]()
+
+![Coverage](https://private-user-images.githubusercontent.com/57017906/316360275-0060cc08-5687-46ff-995c-58194bbc3a4a.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTEzMzAxNTIsIm5iZiI6MTcxMTMyOTg1MiwicGF0aCI6Ii81NzAxNzkwNi8zMTYzNjAyNzUtMDA2MGNjMDgtNTY4Ny00NmZmLTk5NWMtNTgxOTRiYmMzYTRhLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAzMjUlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMzI1VDAxMjQxMlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTFmZGUwZTY0YTZhZDgxYmU4MDg2NTRlZjMwNzNlYWMyN2QwNWI4NjlhNjlkOTljNGY4YzBlMDlkMDZlYmI5MTMmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.FZpysF2M53fQmVNO2InFKiFlYllRSoJ7xydOXBhRbwc)
 
 
