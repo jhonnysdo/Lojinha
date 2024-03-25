@@ -1,4 +1,4 @@
-
+[![Java CI with Maven](https://github.com/jhonnysdo/Lojinha/actions/workflows/testes.yml/badge.svg)](https://github.com/jhonnysdo/Lojinha/actions/workflows/testes.yml)
 # E-Commerce System com Spring Boot e Microserviços
 
 Este projeto é um sistema de e-commerce desenvolvido com o framework Spring Boot e arquitetura de microserviços. Ele permite aos usuários realizar operações como cadastro, login, gestão de itens, manipulação de carrinho de compras e simulação de pagamento.
